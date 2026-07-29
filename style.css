@@ -7,7 +7,7 @@
   --leaf:       #3C6B35;   /* brand green — header, primary buttons */
   --leaf-dark:  #2A4D26;   /* hover / pressed green */
   --leaf-light: #6B9B5C;   /* secondary accents, links */
-  --harvest:    #E0A526;   /* golden accent — badges, highlights */
+  --harvest:    #e07d26;   /* golden accent — badges, highlights */
   --tomato:     #B0432E;   /* favorites, alerts */
   --line:       #D8CFB8;   /* dividers */
   --white:      #FFFEFB;
@@ -132,3 +132,99 @@ input:focus-visible,
   font-size: 1.6rem;
   cursor: pointer;
 }
+
+/* hero layouts  */
+
+.hero {
+  background: var(--leaf);
+  color: var(--white);
+  padding: 64px 0 72px;
+}
+
+.hero .wrap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+}
+
+.hero h1 { color: var(--white); }
+
+.hero p.lead {
+  font-size: 1.15rem;
+  max-width: 46ch;
+  color: #EAF1E4;
+
+}
+
+.hero-actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+
+/* Buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  background: var(--harvest);
+  color: var(--ink);
+}
+
+.btn-primary:hover { background: #cf9720; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--white);
+  border-color: rgba(255,255,255,0.6);
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.12); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--leaf-dark);
+  border-color: var(--leaf-light);
+}
+.btn-outline:hover { background: rgba(60,107,53,0.08); }
+
+/* Features */
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 8px;
+}
+
+
+.feature-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 26px 24px;
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--leaf-light);
+}
+
+.feature-card .verb {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--leaf-light);
+  font-weight: 600;
+}
+
+.feature-card h3 { margin-top: 6px; }
+.feature-card p { color: #4B5142; margin-bottom: 0; }
