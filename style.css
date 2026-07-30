@@ -7,7 +7,7 @@
   --leaf:       #3C6B35;   /* brand green — header, primary buttons */
   --leaf-dark:  #2A4D26;   /* hover / pressed green */
   --leaf-light: #6B9B5C;   /* secondary accents, links */
-  --harvest:    #e07d26;   /* golden accent — badges, highlights */
+  --harvest:    #E0A526;   /* golden accent — badges, highlights */
   --tomato:     #B0432E;   /* favorites, alerts */
   --line:       #D8CFB8;   /* dividers */
   --white:      #FFFEFB;
@@ -141,7 +141,7 @@ input:focus-visible,
   padding: 64px 0;
 }
 
-/* hero layouts  */
+/* Hero Layout */
 
 .hero {
   background: var(--leaf);
@@ -216,7 +216,6 @@ input:focus-visible,
   margin-top: 8px;
 }
 
-
 .feature-card {
   background: var(--white);
   border-radius: var(--radius);
@@ -236,3 +235,52 @@ input:focus-visible,
 
 .feature-card h3 { margin-top: 6px; }
 .feature-card p { color: #4B5142; margin-bottom: 0; }
+
+/* Mission statement */
+
+.mission {
+  padding: 44px 0 8px;
+}
+
+.mission-statement {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3vw, 2.15rem);
+  line-height: 1.35;
+  color: var(--leaf-dark);
+  max-width: 42ch;
+  margin: 0;
+}
+
+.mission-statement mark {
+  background: var(--harvest);
+  color: var(--ink);
+  padding: 0 8px;
+  border-radius: 4px;
+  box-decoration-break: clone;
+}
+
+/* About */
+
+.about-strip {
+  background: var(--paper-dim);
+}
+
+.about-strip .wrap {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+}
+
+.resource-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.resource-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+}
+.resource-list li:last-child { border-bottom: none; }
