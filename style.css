@@ -133,6 +133,14 @@ input:focus-visible,
   cursor: pointer;
 }
 
+/* Footer */
+
+.site-footer {
+  background: var(--leaf);
+  color: var(--white);
+  padding: 64px 0;
+}
+
 /* hero layouts  */
 
 .hero {
