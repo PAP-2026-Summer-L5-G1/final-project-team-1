@@ -7,8 +7,8 @@
   --leaf:       #3C6B35;   /* brand green — header, primary buttons */
   --leaf-dark:  #2A4D26;   /* hover / pressed green */
   --leaf-light: #6B9B5C;   /* secondary accents, links */
-  --harvest:    #E0A526;   /* golden accent — badges, highlights */
-  --tomato:     #B0432E;   /* favorites, alerts */
+  --harvest:    #E8C547;   /* golden accent — badges, highlights */
+  --tomato:     #D45F45;   /* favorites, alerts */
   --line:       #D8CFB8;   /* dividers */
   --white:      #FFFEFB;
 
@@ -284,3 +284,285 @@ input:focus-visible,
   font-weight: 600;
 }
 .resource-list li:last-child { border-bottom: none; }
+
+/* Map - Search */
+
+.map-intro {
+  padding: 48px 0 32px;
+}
+
+.map-intro .lead {
+  max-width: 56ch;
+  color: #4B5142;
+}
+
+.filter-bar {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.zip-search {
+  display: flex;
+  gap: 8px;
+  max-width: 420px;
+}
+
+.zip-search input {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 11px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+}
+
+.filter-chips {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--white);
+  border: 2px solid var(--line);
+  border-radius: 99px;
+  padding: 8px 18px;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.chip.active {
+  background: var(--leaf);
+  border-color: var(--leaf);
+  color: var(--white);
+}
+
+/* Map Area */
+
+.map-layout { padding: 10px 0 64px; }
+
+.map-layout-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.map-canvas {
+  height: 560px;
+  background: var(--paper-dim);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.map-placeholder {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #4B5142;
+  margin: 0;
+}
+
+/* --- Sidebar Place Tabs --- */
+
+.map-sidebar {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  max-height: 560px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tab {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.tab.active {
+  background: var(--leaf);
+  color: var(--white);
+  border-color: var(--leaf);
+}
+
+.tab-count {
+  display: inline-block;
+  min-width: 1.2em;
+  text-align: center;
+}
+
+.marker-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.resource-card {
+  background: var(--paper);
+  border-radius: var(--radius);
+  border-top: 4px solid var(--leaf-light);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.resource-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.resource-card h3 { margin-bottom: 4px; font-size: 1rem; }
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  color: var(--white);
+}
+
+.tag-market { background: var(--leaf); }
+.tag-foodbank { background: var(--harvest); color: var(--ink); }
+.tag-retail { background: var(--leaf-light); }
+
+.empty-state {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #4B5142;
+  text-align: center;
+  padding: 24px 8px;
+}
+
+/* Favorites */
+
+.favorite-stamp {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 2px solid var(--tomato);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.favorite-stamp[aria-pressed="true"] {
+  background: var(--tomato);
+}
+
+.favorite-stamp[aria-pressed="true"]::after {
+  content: "✓";
+  color: var(--white);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* --- Legend --- */
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-market { background: var(--leaf); }
+.dot-foodbank { background: var(--harvest); }
+.dot-retail { background: var(--leaf-light); }
+.dot-saved { background: var(--tomato); }
+
+.resource-detail {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  max-width: 320px;
+  position: relative;
+}
+
+.detail-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* Marker Details - Hoping this works.. */
+
+ .resource-detail {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  max-width: 320px;
+  position: relative;
+}
+
+.detail-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1;
+  color: var(--ink);
+}
