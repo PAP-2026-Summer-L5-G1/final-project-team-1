@@ -1,0 +1,88 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fresh Access Form</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<header class="navbar">
+  <div class="logo">#FreshAccess | Seattle</div>
+
+  <nav>
+    <a href="#">Resources</a>
+    <a href="#">Map</a>
+    <a href="#">Profile</a>
+    <a href="#">Connect Community</a>
+  </nav>
+</header>
+
+<main>
+  <h1>LET'S FOUND YOUR RESOURCE!</h1>
+
+  <form class="form-card">
+    <label for="members">NUMBER OF HOUSEHOLD MEMBERS</label>
+    <select id="members" name="members">
+      <option value="">Select household size</option>
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+    </select>
+    <label for="income">HOUSEHOLD INCOME RANGE</label>
+    <input id="income" name="income" type="text" />
+
+    <label for="zipcode">ZIP CODE</label>
+    <input id="zipcode" name="zipcode" type="text" />
+
+    <fieldset>
+      <legend>ARE YOU ALREADY USING SNAP?</legend>
+
+      <label>
+        <input type="radio" name="snap" value="yes" />
+        YES
+      </label>
+
+      <label>
+        <input type="radio" name="snap" value="no" />
+        NO
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>
+        OPTIONAL: ARE THERE ANY CHILDREN, ELDERLY PEOPLE, OR PREGNANT WOMEN IN
+        YOUR HOUSEHOLD?
+      </legend>
+
+      <label>
+        <input type="radio" name="special-group" value="yes" />
+        YES
+      </label>
+
+      <label>
+        <input type="radio" name="special-group" value="no" />
+        NO
+      </label>
+    </fieldset>
+    <button type="submit">SUBMIT THE FORM</button>
+  </form>
+  <script>
+    const form = document.querySelector(".form-card");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const members = document.querySelector("#members").value;
+      const income = document.querySelector("#income").value;
+      const zipcode = document.querySelector("#zipcode").value;
+      const snap = document.querySelector('input[name="snap"]:checked');
+
+      if (!members || !income || !zipcode || !snap) {
+        alert("Please complete the form.");
+        return;
+      }
+
+      alert("Your form has been submitted.");
+    });
+  </script>
+</main>
