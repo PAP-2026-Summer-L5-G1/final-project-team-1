@@ -7,7 +7,7 @@
   --leaf:       #3C6B35;   /* brand green — header, primary buttons */
   --leaf-dark:  #2A4D26;   /* hover / pressed green */
   --leaf-light: #6B9B5C;   /* secondary accents, links */
-  --harvest:    #e07d26;   /* golden accent — badges, highlights */
+  --harvest:    #E0A526;   /* golden accent — badges, highlights */
   --tomato:     #B0432E;   /* favorites, alerts */
   --line:       #D8CFB8;   /* dividers */
   --white:      #FFFEFB;
@@ -134,7 +134,15 @@ input:focus-visible,
   cursor: pointer;
 }
 
-/* hero layouts  */
+/* Footer */
+
+.site-footer {
+  background: var(--leaf);
+  color: var(--white);
+  padding: 64px 0;
+}
+
+/* Hero Layout */
 
 .hero {
   background: var(--leaf);
@@ -235,7 +243,6 @@ input:focus-visible,
   gap: 22px;
   margin-top: 8px;
 }
-
 
 .feature-card {
   background: var(--white);

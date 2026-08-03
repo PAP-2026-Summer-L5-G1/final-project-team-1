@@ -126,7 +126,7 @@
             </label>
 
             <button type="button" id="goButton" class="form-button">
-  Let’s go!
+  Let's go!
 </button>
         </section>
       </div>
@@ -136,6 +136,8 @@
       const form = document.querySelector("#eligibilityForm");
       const resultOverlay = document.querySelector("#resultOverlay");
       const goButton = document.querySelector("#goButton");
+      const saveDefault = document.querySelector("#saveDefault");
+      let submittedCheck = null;
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -144,17 +146,45 @@
         const income = document.querySelector("#income").value.trim();
         const zipcode = document.querySelector("#zipcode").value.trim();
         const snap = document.querySelector('input[name="snap"]:checked');
+        const specialGroup = document.querySelector(
+          'input[name="special-group"]:checked',
+        );
 
         if (!members || !income || !zipcode || !snap) {
           alert("Please complete the required fields.");
           return;
         }
 
+        submittedCheck = {
+          id: Date.now(),
+          savedAt: new Date().toISOString(),
+          formData: {
+            members,
+            income,
+            zipcode,
+            snap: snap.value,
+            specialGroup: specialGroup ? specialGroup.value : "",
+          },
+          result: {
+            count: 123,
+            tags: ["Fresh Bucks", "SNAP", "Food markets"],
+          },
+        };
+
         resultOverlay.hidden = false;
         document.body.style.overflow = "hidden";
       });
 
       goButton.addEventListener("click", function () {
+        if (saveDefault.checked && submittedCheck) {
+          const savedChecks = JSON.parse(
+            localStorage.getItem("savedChecks") || "[]",
+          );
+
+          savedChecks.unshift(submittedCheck);
+          localStorage.setItem("savedChecks", JSON.stringify(savedChecks));
+        }
+
         resultOverlay.hidden = true;
         document.body.style.overflow = "";
         window.location.href = "map.html";
