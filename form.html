@@ -126,8 +126,9 @@
             </label>
 
             <button type="button" id="goButton" class="form-button">
-  Let's go!
-</button>
+              Let's go!
+            </button>
+          </div>
         </section>
       </div>
     </main>
@@ -187,6 +188,9 @@
 
         resultOverlay.hidden = true;
         document.body.style.overflow = "";
+        sessionStorage.setItem(
+          "currentCheck",
+          JSON.stringify(submittedCheck));
         window.location.href = "map.html";
       });
     </script>
