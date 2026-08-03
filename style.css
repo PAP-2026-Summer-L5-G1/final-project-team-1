@@ -226,11 +226,16 @@ input:focus-visible,
 
 .feature-card .verb {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.84rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--leaf-light);
   font-weight: 600;
+}
+
+.feature-card img {
+  margin-top: 26px;
+  width: 300px;
 }
 
 .feature-card h3 { margin-top: 6px; }
