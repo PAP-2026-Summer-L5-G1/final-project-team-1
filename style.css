@@ -13,6 +13,7 @@
   --white:      #FFFEFB;
 
   --font-display: "Fraunces", Georgia, serif;
+  --font-title: "Rowdies", sans-serif;
   --font-body: "Public Sans", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "IBM Plex Mono", "Courier New", monospace;
 
@@ -34,7 +35,7 @@ body {
 }
 
 h1, h2, h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-title);
   font-weight: 600;
   line-height: 1.15;
   margin: 0 0 0.5em;
@@ -94,7 +95,6 @@ input:focus-visible,
   gap: 10px;
   color: var(--white);
   text-decoration: none;
-  font-family: var(--font-display);
   font-size: 1.3rem;
   font-weight: 600;
 }
@@ -134,7 +134,7 @@ input:focus-visible,
 }
 
 .nav-logo {
-  width: 150px;
+  width: 180px;
 }
 
 /* Footer */
@@ -142,7 +142,7 @@ input:focus-visible,
 .site-footer {
   background: var(--leaf);
   color: var(--white);
-  padding: 64px 0;
+  padding: 40px 0;
 
   .wrap {
     display: flex;
@@ -176,7 +176,16 @@ input:focus-visible,
   font-size: 1.15rem;
   max-width: 46ch;
   color: #EAF1E4;
+}
 
+.hero-area {
+  display: flow-root;
+  padding-top: 0;
+  background: var(--leaf);
+}
+
+.hero-area .hero {
+  background: transparent;
 }
 
 .hero-actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
@@ -227,7 +236,7 @@ input:focus-visible,
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 22px;
-  margin-top: 8px;
+  margin-top: 32px;
 }
 
 .feature-card {
@@ -255,30 +264,6 @@ input:focus-visible,
 .feature-card h3 { margin-top: 6px; }
 .feature-card p { color: #4B5142; margin-bottom: 0; }
 
-/* Mission statement */
-
-.mission {
-  padding: 44px 0 8px;
-}
-
-.mission-statement {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.5rem, 3vw, 2.15rem);
-  line-height: 1.35;
-  color: var(--leaf-dark);
-  max-width: 42ch;
-  margin: 0;
-}
-
-.mission-statement mark {
-  background: var(--harvest);
-  color: var(--ink);
-  padding: 0 8px;
-  border-radius: 4px;
-  box-decoration-break: clone;
-}
-
 /* About */
 
 .about-strip {
@@ -302,11 +287,94 @@ input:focus-visible,
   border-bottom: 1px solid var(--line);
   font-weight: 600;
 }
+.resource-list li:last-child {
+  border-bottom: none;
+}
+
+/* form/nav edit */
+.form-page {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.form-page main {
+  margin: 18px 38px 36px;
+}
+
+.form-page main > h1 {
+  margin: 0 0 16px;
+  font-family: var(--font-title);
+  font-size: 18px;
+}
+
+.form-page .form-card {
+  width: 100%;
+  padding: 52px 36px 20px;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.form-page .form-card > label {
+  display: block;
+  margin-bottom: 12px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+}
+.form-page fieldset legend {
+  display: block;
+  width: 100%;
+  margin: 0 0 26px;
+  padding: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.form-page select,
+.form-page input[type="text"] {
+  display: block;
+  height: 41px;
+  margin-bottom: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 24px;
+  background: #d9d9d9;
+  font-family: var(--font-display);
+}
+
+.form-page #members,
+.form-page #income {
+  width: 106px;
+}
+
+.form-page #zipcode {
+  width: 302px;
+}
+
+.form-page fieldset {
+  margin: 0 0 42px;
+  padding: 0;
+  border: 0;
+}
+
+.form-page fieldset label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 18px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+}
 .resource-list li:last-child { border-bottom: none; }
 
 /* Map - Search */
 
-.map-intro {
+.map-intro, .form-intro, .profile-intro {
   padding: 48px 0 32px;
 }
 
@@ -563,6 +631,120 @@ input:focus-visible,
   color: var(--ink);
 }
 
+/* result detail*/
+
+.form-button {
+  display: block;
+  margin: 24px auto 0;
+  padding: 17px 32px;
+  border: 0;
+  border-radius: 999px;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-title);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.result-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(35, 40, 28, 0.35);
+}
+
+.result-overlay[hidden] {
+  display: none;
+}
+
+.result-modal {
+  width: min(100%, 900px);
+  padding: 40px;
+  background: var(--white);
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(35, 40, 28, 0.2);
+}
+
+.result-modal h2 {
+  margin: 0 0 32px;
+  color: var(--ink);
+  font-family: var(--font-title);
+  font-size: clamp(1.2rem, 2vw, 2rem);
+}
+
+.result-modal h2 strong {
+  font-size: 2em;
+}
+
+.resource-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.resource-tags span {
+  min-width: 136px;
+  padding: 20px 28px;
+  border-radius: 999px;
+  background: #333;
+  color: #fff;
+  font-family: var(--font-title);
+  text-align: center;
+}
+
+.result-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.save-option {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.save-option input {
+  width: 40px;
+  height: 40px;
+  appearance: none;
+  background: #d9d9d9;
+  border-radius: 4px;
+}
+
+.save-option input:checked {
+  background: var(--leaf);
+}
+
+.result-actions .form-button {
+  min-width: 240px;
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .result-modal {
+    padding: 28px 22px;
+  }
+
+  .result-actions {
+    align-items: stretch;
+    flex-direction: column;
+    margin-top: 44px;
+  }
+
+  .result-actions .form-button {
+    width: 100%;
+  }
+}
+
 /* Marker Details - Hoping this works.. */
 
  .resource-detail {
@@ -631,11 +813,11 @@ input:focus-visible,
   font-family: var(--font-display);
 }
 
-.form-page #members,
-.form-page #income {
-  width: 106px;
+.form-page #members {
+  width: 181px;
 }
 
+.form-page #income, 
 .form-page #zipcode {
   width: 302px;
 }
@@ -686,7 +868,6 @@ input:focus-visible,
 .form-button:hover {
   background: var(--leaf-dark);
 }
-
 
 /* form result */
 
