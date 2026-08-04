@@ -1,0 +1,29 @@
+{
+  "name": "final-project-team-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "connect": "node connect.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PAP-2026-Summer-L5-G1/final-project-team-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/PAP-2026-Summer-L5-G1/final-project-team-1/issues"
+  },
+  "homepage": "https://github.com/PAP-2026-Summer-L5-G1/final-project-team-1#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongodb": "^7.5.0"
+  }
+}
