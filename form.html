@@ -95,52 +95,33 @@
           </label>
         </fieldset>
 
-        <button type="submit" class="form-button">
-  Submit the form
-</button>
+        <button type="submit" class="form-button">Submit the form</button>
       </form>
-
-      <div class="result-overlay" id="resultOverlay" hidden>
-        <section
-          class="result-modal"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="resultTitle"
-        >
-          <h2 id="resultTitle">
-            We found <strong>123</strong> resource that fit your status
-          </h2>
-
-          <div class="resource-tags">
-            <span>Fresh Bucks</span>
-            <span>SNAP</span>
-            <span>Food markets</span>
-            <span>Food banks</span>
-            <span>Community meals</span>
-          </div>
-
-          <div class="result-actions">
-            <label class="save-option">
-              <span>Save as your default info</span>
-              <input type="checkbox" id="saveDefault" />
-            </label>
-
-            <button type="button" id="goButton" class="form-button">
-              Let's go!
-            </button>
-          </div>
-        </section>
-      </div>
     </main>
 
     <script>
       const form = document.querySelector("#eligibilityForm");
-      const resultOverlay = document.querySelector("#resultOverlay");
-      const goButton = document.querySelector("#goButton");
-      const saveDefault = document.querySelector("#saveDefault");
-      let submittedCheck = null;
+      const savedData = sessionStorage.getItem("editFormData");
 
-      form.addEventListener("submit", function (event) {
+      if (savedData !== null) {
+        const data = JSON.parse(savedData);
+
+        document.querySelector("#members").value = data.members;
+        document.querySelector("#income").value = data.income;
+        document.querySelector("#zipcode").value = data.zipcode;
+
+        document.querySelector(
+          'input[name="snap"][value="' + data.snap + '"]',
+        ).checked = true;
+
+        document.querySelector(
+          'input[name="special-group"][value="' + data.specialGroup + '"]',
+        ).checked = true;
+
+        sessionStorage.removeItem("editFormData");
+      }
+
+      form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
         const members = document.querySelector("#members").value;
@@ -155,43 +136,46 @@
           alert("Please complete the required fields.");
           return;
         }
-
-        submittedCheck = {
-          id: Date.now(),
-          savedAt: new Date().toISOString(),
-          formData: {
-            members,
-            income,
-            zipcode,
-            snap: snap.value,
-            specialGroup: specialGroup ? specialGroup.value : "",
-          },
-          result: {
-            count: 123,
-            tags: ["Fresh Bucks", "SNAP", "Food markets"],
-          },
-        };
-
-        resultOverlay.hidden = false;
-        document.body.style.overflow = "hidden";
-      });
-
-      goButton.addEventListener("click", function () {
-        if (saveDefault.checked && submittedCheck) {
-          const savedChecks = JSON.parse(
-            localStorage.getItem("savedChecks") || "[]",
-          );
-
-          savedChecks.unshift(submittedCheck);
-          localStorage.setItem("savedChecks", JSON.stringify(savedChecks));
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
         }
+        const formData = {
+          members: document.querySelector("#members").value,
+          income: document.querySelector("#income").value,
+          zipcode: document.querySelector("#zipcode").value,
+          snap: document.querySelector('input[name="snap"]:checked').value,
+          specialGroup:
+            document.querySelector('input[name="special-group"]:checked')
+              ?.value || "no",
+        };
+        try {
+          const response = await fetch("/api/matches", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
 
-        resultOverlay.hidden = true;
-        document.body.style.overflow = "";
-        sessionStorage.setItem(
-          "currentCheck",
-          JSON.stringify(submittedCheck));
-        window.location.href = "map.html";
+          if (!response.ok) {
+            throw new Error("Request failed");
+          }
+
+          const result = await response.json();
+
+          const matchData = {
+            formData: formData,
+            result: result,
+          };
+
+          sessionStorage.setItem("matchData", JSON.stringify(matchData));
+
+          window.location.href = "match-result.html";
+        } catch (error) {
+          alert("Something went wrong. Please try again.");
+          return;
+        }
       });
     </script>
   </body>
