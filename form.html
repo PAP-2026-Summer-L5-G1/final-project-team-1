@@ -1,135 +1,136 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Fresh Access Form</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=IBM+Plex+Mono:wght@500;600&family=Public+Sans:wght@400;600;700&family=Rowdies:wght@300;400;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Access</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Rowdies:wght@300;400;700&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
   </head>
 
-  <body class="form-page">
-    <header class="navbar">
-      <a class="logo" href="index.html"> #FreshAccess | Seattle </a>
-
-      <nav aria-label="Main navigation">
-        <a href="index.html">Resources</a>
-        <a href="map.html">Map</a>
-        <a href="profile.html">Profile</a>
-      </nav>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a href="index.html" class="brand">
+          <img class="nav-logo" src="assets/fa-logo-outline-light.png" alt="Fresh Access logo">
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
+        <nav class="main-nav" id="mainNav">
+          <a href="index.html">Home</a>
+          <a href="map.html">Map</a>
+          <a href="profile.html">Profile</a>
+        </nav>
+      </div>
     </header>
 
-    <main>
-      <h1>Let's find your resource!</h1>
+    <main class="form-page">
+      <div class="wrap">
+        <section class="form-intro">
+          <h1>Let's find your resource!</h1>
+        </section>
 
-      <form class="form-card" id="eligibilityForm">
-        <label for="members">Number of household members</label>
+        <form class="form-card" id="eligibilityForm">
+          <label for="members">Number of household members</label>
 
-        <select id="members" name="members" required>
-          <option value="">Select household size</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5 or more</option>
-        </select>
+          <select id="members" name="members" required>
+            <option value="">Select household size</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 or more</option>
+          </select>
 
-        <label for="income">Household income range</label>
-        <input
-          id="income"
-          name="income"
-          type="text"
-          placeholder="$0 - $1,000"
-          required
-        />
+          <label for="income">Household income range</label>
+          <input
+            id="income"
+            name="income"
+            type="text"
+            inputmode="numeric"
+            placeholder="$0 - $10,000"
+            required
+          />
 
-        <label for="zipcode">Zip code</label>
-        <input
-          id="zipcode"
-          name="zipcode"
-          type="text"
-          inputmode="numeric"
-          pattern="[0-9]{5}"
-          maxlength="5"
-          placeholder="98101"
-          required
-        />
+          <label for="zipcode">Zip code</label>
+          <input
+            id="zipcode"
+            name="zipcode"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]{5}"
+            maxlength="5"
+            placeholder="98101"
+            required
+          />
 
-        <fieldset>
-          <legend>Are you already using SNAP?</legend>
+          <fieldset>
+            <legend>Are you already using SNAP?</legend>
 
-          <label>
-            YES
-            <input type="radio" name="snap" value="yes" required />
-          </label>
-
-          <label>
-            NO
-            <input type="radio" name="snap" value="no" />
-          </label>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            Optional: Are there any children, elderly people, or pregnant women
-            in your household?
-          </legend>
-
-          <label>
-            YES
-            <input type="radio" name="special-group" value="yes" />
-          </label>
-
-          <label>
-            NO
-            <input type="radio" name="special-group" value="no" />
-          </label>
-        </fieldset>
-
-        <button type="submit" class="form-button">
-  Submit the form
-</button>
-      </form>
-
-      <div class="result-overlay" id="resultOverlay" hidden>
-        <section
-          class="result-modal"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="resultTitle"
-        >
-          <h2 id="resultTitle">
-            We found <strong>123</strong> resource that fit your status
-          </h2>
-
-          <div class="resource-tags">
-            <span>Fresh Bucks</span>
-            <span>SNAP</span>
-            <span>Food markets</span>
-            <span>Food banks</span>
-            <span>Community meals</span>
-          </div>
-
-          <div class="result-actions">
-            <label class="save-option">
-              <span>Save as your default info</span>
-              <input type="checkbox" id="saveDefault" />
+            <label>
+              YES
+              <input type="radio" name="snap" value="yes" required />
             </label>
 
-            <button type="button" id="goButton" class="form-button">
-              Let's go!
-            </button>
-          </div>
-        </section>
+            <label>
+              NO
+              <input type="radio" name="snap" value="no" />
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>
+              Optional: Are there any children, elderly people, or pregnant women
+              in your household?
+            </legend>
+
+            <label>
+              YES
+              <input type="radio" name="special-group" value="yes" />
+            </label>
+
+            <label>
+              NO
+              <input type="radio" name="special-group" value="no" />
+            </label>
+          </fieldset>
+
+          <button type="submit" class="form-button">
+            Submit the form
+          </button>
+        </form>
+
+        <div class="result-overlay" id="resultOverlay" hidden>
+          <section
+            class="result-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="resultTitle"
+          >
+            <h2 id="resultTitle">
+              We found <strong>123</strong> resource(s) that fit your status
+            </h2>
+
+            <div class="resource-tags">
+              <span>Fresh Bucks</span>
+              <span>SNAP</span>
+              <span>Food markets</span>
+              <span>Food banks</span>
+              <span>Community meals</span>
+            </div>
+
+            <div class="result-actions">
+              <label class="save-option">
+                <span>Save as your default info</span>
+                <input type="checkbox" id="saveDefault" />
+              </label>
+
+              <button type="button" id="goButton" class="form-button">
+                Let's go!
+              </button>
+            </div>
+          </section>
+        </div>
       </div>
     </main>
 
@@ -167,7 +168,7 @@
             specialGroup: specialGroup ? specialGroup.value : "",
           },
           result: {
-            count: 123,
+            count: 123, // placeholder
             tags: ["Fresh Bucks", "SNAP", "Food markets"],
           },
         };
