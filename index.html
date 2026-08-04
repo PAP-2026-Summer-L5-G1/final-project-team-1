@@ -1,121 +1,94 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fresh Access</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="hero-area">
-      <header class="navbar">
-        <a class="logo" href="index.html">#FreshAccess | Seattle</a>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fresh Access</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Rowdies:wght@300;400;700&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+    </head>
 
-        <nav aria-label="Main navigation">
-          <a href="index.html" class="active">Resources</a>
-          <a href="map.html">Map</a>
-          <a href="profile.html">Profile</a>
-        </nav>
-      </header>
-
-      <section class="hero">
-        <div class="wrap">
-          <div>
-            <h1>Fresh Food, Close to You</h1>
-            <p class="lead">
-              Fresh Access connects Seattle residents to Fresh Bucks farmers
-              markets and produce resources near them. Find a market, check what
-              you qualify for, and save your go to spots.
-            </p>
-            <div class="hero-actions">
-              <a href="map.html" class="btn btn-primary">Find a Market</a>
-              <a href="form.html" class="btn btn-ghost">
-                Check Your Eligibility
-              </a>
+    <body>
+        <header class="site-header">
+            <div class="wrap">
+                <a href="index.html" class="brand">
+                    <img class="nav-logo" src="assets/fa-logo-outline-light.png" alt="Fresh Access logo">
+                </a>
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
+                <nav class="main-nav" id="mainNav">
+                    <a href="index.html" class="active">Home</a>
+                    <a href="map.html">Map</a>
+                    <a href="profile.html">Profile</a>
+                </nav>
             </div>
-          </div>
-          <div class="stamp" aria-hidden="true">
-            <span>Using real Fresh Bucks information</span>
-          </div>
+        </header>
+
+        <section class="hero">
+            <div class="wrap">
+                <div>
+                    <h1>Fresh Food, Close to You</h1>
+                    <p class="lead">Fresh Access connects Seattle residents to Fresh Bucks farmers markets and produce resources near them. Find a market, check what you qualify for, and save your go to spots.</p>
+                    <div class="hero-actions">
+                        <a href="map.html" class="btn btn-primary">Find a Market</a>
+                        <a href="form.html" class="btn btn-ghost">Check Your Eligibility</a>
+                    </div>
+                </div>
+                <div class="stamp" aria-hidden="true">
+                    <span>Using real Fresh Bucks information</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="wrap">
+                <h2>You're here! Next Steps:</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <span class="verb">Find</span>
+                        <img src="assets/land-o-lakes-inc-BlXa_riHlp4-unsplash.jpg" alt="">
+                        <h3>Locate nearby markets</h3>
+                        <p>Search by zip code to see farmers markets and retailers near you, with hours and what they accept.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="verb">Check</span>
+                        <img src="assets/daniel-thomas-HA-0i0E7sq4-unsplash.jpg" alt="">
+                        <h3>See what you qualify for</h3>
+                        <p>Enter your household size and income to find Fresh Bucks and SNAP matches you're eligible for and more.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="verb">Save</span>
+                        <img src="assets/joel-muniz-3k3l2brxmwQ-unsplash.jpg" alt="">
+                        <h3>Keep your go-to spots</h3>
+                        <p>Favorite the markets and food banks you visit most, and add your own notes for next time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-strip">
+            <div class="wrap section">
+                <div>
+                    <h2>About Fresh Access</h2>
+                    <p>Fresh Access was built to make Seattle's Fresh Bucks program easier to find and use...</p>
+                </div>
+                <div>
+                    <span>Other resources</span>
+                    <ul class="resource-list">
+                        <li><a href="https://www.seattlefreshbucks.org/" target="_blank">Seattle Fresh Bucks program overview</a></li>
+                        <li><a href="https://www.feedingamerica.org/find-your-local-foodbank" target="_blank">Food bank locations near you</a></li>
+                        <li><a href="https://www.dshs.wa.gov/esa/community-services-offices/basic-food" target="_blank">SNAP application assistance</a></li>
+                        <li><a href="https://www.google.com/search?q=community+meals+near+me" target="_blank">Community meal programs</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+        <div class="wrap">
+            <img src="assets/fa-logo-outline-light2.png" alt="Fresh Access logo">
+            <p>Fresh Access. A student project connecting Seattle residents to fresh and affordable food.</p>
         </div>
-      </section>
-    </div>
-
-    <section class="mission">
-      <div class="wrap">
-        <p class="mission-statement">
-          Our mission is to <mark>help</mark>, <mark>support</mark>, and
-          <mark>connect</mark> people to essential
-          <mark>fresh food resources</mark>.
-        </p>
-      </div>
-    </section>
-
-    <div class="slat-divider"></div>
-
-    <section class="section">
-      <div class="wrap">
-        <h2>You're here! Next Steps:</h2>
-        <div class="feature-grid">
-          <div class="feature-card">
-            <span class="verb">Find</span>
-            <h3>Locate nearby markets</h3>
-            <p>
-              Search by zip code to see farmers markets and retailers near you,
-              with hours and what they accept.
-            </p>
-          </div>
-          <div class="feature-card">
-            <span class="verb">Check</span>
-            <h3>See what you qualify for</h3>
-            <p>
-              Enter your household size and income to find Fresh Bucks and SNAP
-              matches you're eligible for and more.
-            </p>
-          </div>
-          <div class="feature-card">
-            <span class="verb">Save</span>
-            <h3>Keep your go-to spots</h3>
-            <p>
-              Favorite the markets and food banks you visit most, and add your
-              own notes for next time.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="about-strip">
-      <div class="wrap section">
-        <div>
-          <h2>About Fresh Access</h2>
-          <p>
-            Fresh Access was built to make Seattle's Fresh Bucks program easier
-            to find and use...
-          </p>
-        </div>
-        <div>
-          <span class="section-label">Other resources</span>
-          <ul class="resource-list">
-            <li>Seattle Fresh Bucks, program overview</li>
-            <li>Food bank locations near you</li>
-            <li>SNAP application assistance</li>
-            <li>Community meal programs</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      <div class="wrap">
-        Fresh Access. A student project connecting Seattle residents to fresh
-        and affordable food.
-      </div>
-    </footer>
-  </body>
+        </footer>
+    </body>
 </html>

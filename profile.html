@@ -1,28 +1,30 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile for Fresh Access</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&family=Rowdies:wght@300;400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Access</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Rowdies:wght@300;400;700&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
   </head>
-  <body>
-    <header class="navbar">
-      <a class="logo" href="index.html">#FreshAccess | Seattle</a>
 
-      <nav aria-label="Main navigation">
-        <a href="index.html">Resources</a>
-        <a href="map.html">Map</a>
-        <a href="profile.html" class="active">Profile</a>
-      </nav>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a href="index.html" class="brand">
+          <img class="nav-logo" src="assets/fa-logo-outline-light.png" alt="Fresh Access logo">
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
+        <nav class="main-nav" id="mainNav">
+          <a href="index.html">Home</a>
+          <a href="map.html">Map</a>
+          <a href="profile.html" class="active">Profile</a>
+        </nav>
+      </div>
     </header>
 
-    <section class="page-header">
+    <section class="profile-intro">
       <div class="wrap">
         <h1>Your profile</h1>
         <p class="sub">
@@ -53,6 +55,7 @@
         </div>
       </div>
     </div>
+
     <section class="wrap saved-content">
       <h2>Saved searches</h2>
 
@@ -149,10 +152,10 @@
     </section>
 
     <footer class="site-footer">
-      <div class="wrap">
-        Fresh Access. A student project connecting Seattle residents to fresh
-        and affordable food.
-      </div>
+    <div class="wrap">
+        <img src="assets/fa-logo-outline-light2.png" alt="Fresh Access logo">
+        <p>Fresh Access. A student project connecting Seattle residents to fresh and affordable food.</p>
+    </div>
     </footer>
   </body>
 </html>
