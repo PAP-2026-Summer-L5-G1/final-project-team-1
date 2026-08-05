@@ -1,21 +1,35 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fresh Access</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Rowdies:wght@300;400;700&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Rowdies:wght@300;400;700&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
     <header class="site-header">
       <div class="wrap">
         <a href="index.html" class="brand">
-          <img class="nav-logo" src="assets/fa-logo-outline-light.png" alt="Fresh Access logo">
+          <img
+            class="nav-logo"
+            src="assets/fa-logo-outline-light.png"
+            alt="Fresh Access logo"
+          />
         </a>
-        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+        >
+          &#9776;
+        </button>
         <nav class="main-nav" id="mainNav">
           <a href="index.html">Home</a>
           <a href="map.html">Map</a>
@@ -82,16 +96,18 @@
             const button = document.createElement("button");
 
             title.textContent = "Saved search";
-            zipcode.textContent = `ZIP code: ${check.formData.zipcode}`;
+            zipcode.textContent =
+              `Household of ${check.formData.members} · ` +
+              `ZIP code: ${check.formData.zipcode}`;
 
             button.type = "button";
             button.className = "btn btn-outline";
-            button.textContent = "Use this search";
+            button.textContent = "View match results";
 
             button.addEventListener("click", () => {
-              sessionStorage.setItem("currentCheck", JSON.stringify(check));
+              sessionStorage.setItem("matchData", JSON.stringify(check));
 
-              window.location.href = "map.html";
+              window.location.href = "match-result.html";
             });
 
             item.className = "saved-check-card";
@@ -153,8 +169,11 @@
 
     <footer class="site-footer">
       <div class="wrap">
-        <img src="assets/fa-logo-outline-light2.png" alt="Fresh Access logo">
-        <p>Fresh Access. A student project connecting Seattle residents to fresh and affordable food.</p>
+        <img src="assets/fa-logo-outline-light2.png" alt="Fresh Access logo" />
+        <p>
+          Fresh Access. A student project connecting Seattle residents to fresh
+          and affordable food.
+        </p>
       </div>
     </footer>
   </body>

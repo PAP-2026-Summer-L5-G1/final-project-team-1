@@ -4,8 +4,8 @@ const cors = require("cors");
 const { connectDB } = require("./db/connection");
 
 const resourceRoutes = require("./routes/resources");
-const savedResourceRoutes = require("./routes/savedResources");
-
+const savedResourceRoutes = require("./routes/savedresources");
+const matchRoutes = require("./routes/match");
 const app = express();
 
 app.use(cors());
@@ -13,6 +13,7 @@ app.use(express.json());
 
 app.use("/api/resources", resourceRoutes);
 app.use("/api/saved-resources", savedResourceRoutes);
+app.use("/api/matches", matchRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);

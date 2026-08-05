@@ -15,14 +15,29 @@
   </head>
 
   <body>
-    <header class="navbar">
-      <a class="logo" href="index.html"> #FreshAccess | Seattle </a>
-
-      <nav aria-label="Main navigation">
-        <a href="index.html">Resources</a>
-        <a href="map.html">Map</a>
-        <a href="profile.html">Profile</a>
-      </nav>
+    <header class="site-header">
+      <div class="wrap">
+        <a href="index.html" class="brand">
+          <img
+            class="nav-logo"
+            src="assets/fa-logo-outline-light.png"
+            alt="Fresh Access logo"
+          />
+        </a>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+        >
+          &#9776;
+        </button>
+        <nav class="main-nav" id="mainNav">
+          <a href="index.html">Home</a>
+          <a href="map.html">Map</a>
+          <a href="profile.html">Profile</a>
+        </nav>
+      </div>
     </header>
 
     <main class="section results-page">
@@ -58,7 +73,9 @@
 
           <p>
             <strong>Status:</strong>
-            <span class="tag tag-market">Strong Match</span>
+            <span id="freshBucksStatus" class="tag tag-market">
+              Possible Match
+            </span>
           </p>
 
           <p>
@@ -104,6 +121,20 @@
         </article>
       </section>
 
+      <section class="matched-locations section">
+        <h2>Fresh Bucks locations</h2>
+        <p id="locationsSummary"></p>
+        <a class="btn btn-primary" href="map.html"> Open map </a>
+        <ul id="matchedLocations" class="marker-list"></ul>
+      </section>
+
+      <section class="matched-locations section">
+        <h2>Food banks</h2>
+        <p id="foodBankSummary"></p>
+        <a class="btn btn-primary" href="map.html"> Open map </a>
+        <ul id="foodBankLocations" class="marker-list"></ul>
+      </section>
+
       <script>
         const savedMatchData = sessionStorage.getItem("matchData");
 
@@ -115,6 +146,13 @@
           const editAnswers = document.querySelector("#editAnswers");
           const findFreshBucks = document.querySelector("#findFreshBucks");
           const saveButton = document.querySelector("#saveFreshBucks");
+          const freshBucksStatus =
+            document.querySelector("#freshBucksStatus");
+          const locationsSummary = document.querySelector("#locationsSummary");
+          const matchedLocations = document.querySelector("#matchedLocations");
+          const foodBankSummary = document.querySelector("#foodBankSummary");
+          const foodBankLocationsList =
+            document.querySelector("#foodBankLocations");
 
           const snapText =
             matchData.formData.snap === "yes"
@@ -124,6 +162,72 @@
           summary.textContent =
             `Household of ${matchData.formData.members} · ` +
             `ZIP ${matchData.formData.zipcode} · ${snapText}`;
+
+          const freshBucksProgram = matchData.result.programs.find(
+            function (program) {
+              return program.id === "fresh-bucks";
+            },
+          );
+
+          if (freshBucksProgram) {
+            freshBucksStatus.textContent = freshBucksProgram.status;
+          }
+
+          const locations = matchData.result.locations || [];
+
+          locationsSummary.textContent =
+            locations.length + " Fresh Bucks locations found.";
+
+          function showLocations(locations, list) {
+            locations.forEach(function (location) {
+              const item = document.createElement("li");
+              const title = document.createElement("h3");
+              const address = document.createElement("p");
+              const hours = document.createElement("p");
+              const mapLink = document.createElement("a");
+
+              item.className = "resource-card";
+              title.textContent = location.name;
+              address.textContent = location.address;
+              hours.textContent = location.hours
+                ? "Hours: " +
+                  Object.entries(location.hours)
+                    .map(function (entry) {
+                      return entry[0] + ": " + entry[1];
+                    })
+                    .join(" · ")
+                : "Hours: Not available";
+
+              mapLink.className = "btn btn-outline";
+              mapLink.href = "map.html";
+              mapLink.textContent = "View on map";
+
+              if (location.website) {
+                const website = document.createElement("a");
+
+                website.className = "btn btn-outline";
+                website.href = location.website;
+                website.target = "_blank";
+                website.rel = "noopener";
+                website.textContent = "Visit website";
+
+                item.append(title, address, hours, website, mapLink);
+              } else {
+                item.append(title, address, hours, mapLink);
+              }
+
+              list.appendChild(item);
+            });
+          }
+
+          showLocations(locations, matchedLocations);
+
+          const foodBankLocations = matchData.result.foodBankLocations || [];
+
+          foodBankSummary.textContent =
+            foodBankLocations.length + " food banks found.";
+
+          showLocations(foodBankLocations, foodBankLocationsList);
 
           editAnswers.addEventListener("click", function () {
             sessionStorage.setItem(
@@ -138,7 +242,9 @@
             const resource = {
               id: "fresh-bucks",
               name: "Fresh Bucks",
-              status: "Strong Match",
+              status: freshBucksProgram
+                ? freshBucksProgram.status
+                : "Possible Match",
             };
 
             localStorage.setItem("savedResources", JSON.stringify([resource]));

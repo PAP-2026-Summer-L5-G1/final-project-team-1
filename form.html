@@ -1,21 +1,35 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fresh Access</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Rowdies:wght@300;400;700&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Rowdies:wght@300;400;700&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
     <header class="site-header">
       <div class="wrap">
         <a href="index.html" class="brand">
-          <img class="nav-logo" src="assets/fa-logo-outline-light.png" alt="Fresh Access logo">
+          <img
+            class="nav-logo"
+            src="assets/fa-logo-outline-light.png"
+            alt="Fresh Access logo"
+          />
         </a>
-        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+        >
+          &#9776;
+        </button>
         <nav class="main-nav" id="mainNav">
           <a href="index.html">Home</a>
           <a href="map.html">Map</a>
@@ -43,39 +57,55 @@
           </select>
 
           <label for="income">Household income range</label>
-          <input id="income" name="income" type="text" inputmode="numeric" placeholder="$0 - $10,000" required>
+          <input
+            id="income"
+            name="income"
+            type="text"
+            inputmode="numeric"
+            placeholder="$0 - $10,000"
+            required
+          />
 
           <label for="zipcode">Zip code</label>
-          <input id="zipcode" name="zipcode" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="98101" required>
+          <input
+            id="zipcode"
+            name="zipcode"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]{5}"
+            maxlength="5"
+            placeholder="98101"
+            required
+          />
 
           <fieldset>
             <legend>Are you already using SNAP?</legend>
 
             <label>
               YES
-              <input type="radio" name="snap" value="yes" required>
+              <input type="radio" name="snap" value="yes" required />
             </label>
 
             <label>
               NO
-              <input type="radio" name="snap" value="no">
+              <input type="radio" name="snap" value="no" />
             </label>
           </fieldset>
 
           <fieldset>
             <legend>
-              Optional: Are there any children, elderly people, or pregnant women
-              in your household?
+              Optional: Are there any children, elderly people, or pregnant
+              women in your household?
             </legend>
 
             <label>
               YES
-              <input type="radio" name="special-group" value="yes">
+              <input type="radio" name="special-group" value="yes" />
             </label>
 
             <label>
               NO
-              <input type="radio" name="special-group" value="no">
+              <input type="radio" name="special-group" value="no" />
             </label>
           </fieldset>
 
@@ -136,9 +166,8 @@
             document.querySelector('input[name="special-group"]:checked')
               ?.value || "no",
         };
-
         try {
-          const response = await fetch("/api/matches", {
+          const response = await fetch("http://localhost:3000/api/matches", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -146,22 +175,22 @@
             body: JSON.stringify(formData),
           });
 
-          if (response.status < 200 || response.status >= 300) {
+          if (!response.ok) {
             throw new Error("Request failed");
           }
 
           const result = await response.json();
 
           const matchData = {
-            formData: formData,
-            result: result,
+            formData,
+            result,
           };
 
           sessionStorage.setItem("matchData", JSON.stringify(matchData));
           window.location.href = "match-result.html";
         } catch (error) {
-          alert("Something went wrong. Please try again.");
-          return;
+          console.error("Submit error:", error);
+          alert(error.message);
         }
       });
     </script>
