@@ -132,17 +132,7 @@
 
             window.location.href = "form.html";
           });
-          let savedResources = JSON.parse(
-            localStorage.getItem("savedResources") || "[]",
-          );
 
-          let isSaved = false;
-
-          savedResources.forEach(function (resource) {
-            if (resource.id === "fresh-bucks") {
-              isSaved = true;
-            }
-          });
           saveButton.addEventListener("click", function () {
             const resource = {
               id: "fresh-bucks",
@@ -151,11 +141,10 @@
             };
 
             localStorage.setItem("savedResources", JSON.stringify([resource]));
+            saveButton.setAttribute("aria-pressed", "true");
 
             alert("Saved!");
           });
-
-          saveButton.setAttribute("aria-pressed", isSaved);
 
           findFreshBucks.addEventListener("click", function () {
             const mapFilter = {
