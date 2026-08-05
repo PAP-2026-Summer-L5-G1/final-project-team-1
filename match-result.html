@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Rowdies:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Resource Matches</title>
+  </head>
+
+  <body>
+    <header class="navbar">
+      <a class="logo" href="index.html"> #FreshAccess | Seattle </a>
+
+      <nav aria-label="Main navigation">
+        <a href="index.html">Resources</a>
+        <a href="map.html">Map</a>
+        <a href="profile.html">Profile</a>
+      </nav>
+    </header>
+
+    <main class="section results-page">
+      <h1>Your personalized resource matches</h1>
+
+      <p>
+        Based on the information you provided, we found programs that may be
+        worth exploring.
+      </p>
+
+      <section id="userSummary"></section>
+      <div class="hero-actions">
+        <button id="editAnswers" class="btn btn-outline" type="button">
+          Edit Answers
+        </button>
+      </div>
+
+      <section id="matchesList" class="section">
+        <article class="feature-card">
+          <div class="resource-card-top">
+            <h2>Fresh Bucks</h2>
+
+            <button
+              id="saveFreshBucks"
+              class="favorite-stamp"
+              type="button"
+              aria-pressed="false"
+              aria-label="Save Fresh Bucks"
+            >
+              <span class="stamp-mark">★</span>
+            </button>
+          </div>
+
+          <p>
+            <strong>Status:</strong>
+            <span class="tag tag-market">Strong Match</span>
+          </p>
+
+          <p>
+            Fresh Bucks helps Seattle residents buy fruits and vegetables at
+            participating markets and stores.
+          </p>
+
+          <h3>Why it may fit you</h3>
+          <p>You live in Seattle and reported that you are receiving SNAP.</p>
+
+          <h3>What it may provide</h3>
+          <p>Support for buying fruits and vegetables.</p>
+
+          <h3>What you may need</h3>
+          <p>
+            Photo ID, proof of address, income information, and SNAP
+            documentation.
+          </p>
+
+          <p class="disclaimer">
+            Requirements may vary. Confirm the latest requirements with the
+            official program provider.
+          </p>
+
+          <div class="hero-actions">
+            <button id="findFreshBucks" class="btn btn-primary" type="button">
+              Find Nearby Locations
+            </button>
+
+            <a class="btn btn-outline" href="program-details.html">
+              View Program Details
+            </a>
+
+            <a
+              class="btn btn-outline"
+              href="https://www.seattle.gov/food"
+              target="_blank"
+              rel="noopener"
+            >
+              Visit Official Website
+            </a>
+          </div>
+        </article>
+      </section>
+
+      <script>
+        const savedMatchData = sessionStorage.getItem("matchData");
+
+        if (!savedMatchData) {
+          window.location.href = "form.html";
+        } else {
+          const matchData = JSON.parse(savedMatchData);
+          const summary = document.querySelector("#userSummary");
+          const editAnswers = document.querySelector("#editAnswers");
+          const findFreshBucks = document.querySelector("#findFreshBucks");
+          const saveButton = document.querySelector("#saveFreshBucks");
+
+          const snapText =
+            matchData.formData.snap === "yes"
+              ? "Currently receiving SNAP"
+              : "Not currently receiving SNAP";
+
+          summary.textContent =
+            `Household of ${matchData.formData.members} · ` +
+            `ZIP ${matchData.formData.zipcode} · ${snapText}`;
+
+          editAnswers.addEventListener("click", function () {
+            sessionStorage.setItem(
+              "editFormData",
+              JSON.stringify(matchData.formData),
+            );
+
+            window.location.href = "form.html";
+          });
+
+          saveButton.addEventListener("click", function () {
+            const resource = {
+              id: "fresh-bucks",
+              name: "Fresh Bucks",
+              status: "Strong Match",
+            };
+
+            localStorage.setItem("savedResources", JSON.stringify([resource]));
+            saveButton.setAttribute("aria-pressed", "true");
+
+            alert("Saved!");
+          });
+
+          findFreshBucks.addEventListener("click", function () {
+            const mapFilter = {
+              zipcode: matchData.formData.zipcode,
+              program: "Fresh Bucks",
+              purpose: "Use benefits",
+              distance: 5,
+            };
+
+            sessionStorage.setItem("mapFilter", JSON.stringify(mapFilter));
+            sessionStorage.setItem("currentCheck", JSON.stringify(matchData));
+            window.location.href = "map.html";
+          });
+        }
+      </script>
+    </main>
+  </body>
+</html>

@@ -103,14 +103,59 @@
 
       <h2>Saved resources</h2>
 
-      <div id="savedResourcesList"></div>
+      <div id="savedResourcesList">
+        <script>
+          const savedResourcesList = document.querySelector(
+            "#savedResourcesList",
+          );
+
+          let savedResources = JSON.parse(
+            localStorage.getItem("savedResources") || "[]",
+          );
+
+          if (savedResources.length === 0) {
+            savedResourcesList.textContent = "No saved resources yet.";
+          }
+
+          savedResources.forEach(function (resource) {
+            const card = document.createElement("article");
+            const title = document.createElement("h3");
+            const status = document.createElement("p");
+            const button = document.createElement("button");
+
+            card.className = "saved-check-card";
+            title.textContent = resource.name;
+            status.textContent = "Status: " + resource.status;
+
+            button.textContent = "Remove";
+            button.className = "btn btn-outline";
+            button.type = "button";
+
+            button.addEventListener("click", function () {
+              savedResources = savedResources.filter(function (item) {
+                return item.id !== resource.id;
+              });
+
+              localStorage.setItem(
+                "savedResources",
+                JSON.stringify(savedResources),
+              );
+
+              card.remove();
+            });
+
+            card.append(title, status, button);
+            savedResourcesList.appendChild(card);
+          });
+        </script>
+      </div>
     </section>
 
     <footer class="site-footer">
-    <div class="wrap">
+      <div class="wrap">
         <img src="assets/fa-logo-outline-light2.png" alt="Fresh Access logo">
         <p>Fresh Access. A student project connecting Seattle residents to fresh and affordable food.</p>
-    </div>
+      </div>
     </footer>
   </body>
 </html>

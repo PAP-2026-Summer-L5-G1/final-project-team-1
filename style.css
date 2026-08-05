@@ -261,8 +261,8 @@ input:focus-visible,
   width: 300px;
 }
 
-.feature-card h3 { margin-top: 6px; }
-.feature-card p { color: #4B5142; margin-bottom: 0; }
+.feature-card h3 { margin-top: 24px; }
+.feature-card p { color: #4B5142; margin-bottom: 1em; }
 
 /* About */
 
@@ -298,6 +298,10 @@ input:focus-visible,
 }
 
 .form-page main {
+  margin: 18px 38px 36px;
+}
+
+.results-page {
   margin: 18px 38px 36px;
 }
 
