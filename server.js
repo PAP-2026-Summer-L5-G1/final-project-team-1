@@ -3,16 +3,16 @@ const express = require("express");
 const cors = require("cors");
 const { connectDB } = require("./db/connection");
 
-// const resourceRoutes = require("./routes/resources");
-// const savedResourceRoutes = require("./routes/savedResources");
+const resourceRoutes = require("./routes/resources");
+const savedResourceRoutes = require("./routes/savedResources");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// app.use("/api/resources", resourceRoutes);
-// app.use("/api/saved-resources", savedResourceRoutes);
+app.use("/api/resources", resourceRoutes);
+app.use("/api/saved-resources", savedResourceRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);
