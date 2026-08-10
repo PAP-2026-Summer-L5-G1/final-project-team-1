@@ -101,21 +101,13 @@
           </p>
 
           <div class="hero-actions">
-            <button id="findFreshBucks" class="btn btn-primary" type="button">
-              Find Nearby Locations
-            </button>
-
-            <a class="btn btn-outline" href="program-details.html">
-              View Program Details
-            </a>
-
             <a
               class="btn btn-outline"
-              href="https://www.seattle.gov/food"
+              href="https://www.seattlefreshbucks.org/"
               target="_blank"
               rel="noopener"
             >
-              Visit Official Website
+              Learn about Fresh Bucks
             </a>
           </div>
         </article>
@@ -142,12 +134,44 @@
           window.location.href = "form.html";
         } else {
           const matchData = JSON.parse(savedMatchData);
+
+          async function refreshDistancesIfNeeded() {
+            const locations = matchData.result.locations || [];
+            const foodBanks = matchData.result.foodBankLocations || [];
+            const allLocations = locations.concat(foodBanks);
+            const hasDistances = allLocations.every(function (location) {
+              return typeof location.distanceMiles === "number";
+            });
+
+            if (hasDistances) {
+              return;
+            }
+
+            try {
+              const response = await fetch("http://localhost:3000/api/matches", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(matchData.formData),
+              });
+
+              if (!response.ok) {
+                throw new Error("Could not refresh result distances");
+              }
+
+              matchData.result = await response.json();
+              sessionStorage.setItem("matchData", JSON.stringify(matchData));
+            } catch (error) {
+              console.error(error);
+            }
+          }
+
+          async function renderResults() {
+          await refreshDistancesIfNeeded();
+
           const summary = document.querySelector("#userSummary");
           const editAnswers = document.querySelector("#editAnswers");
-          const findFreshBucks = document.querySelector("#findFreshBucks");
           const saveButton = document.querySelector("#saveFreshBucks");
-          const freshBucksStatus =
-            document.querySelector("#freshBucksStatus");
+          const freshBucksStatus = document.querySelector("#freshBucksStatus");
           const locationsSummary = document.querySelector("#locationsSummary");
           const matchedLocations = document.querySelector("#matchedLocations");
           const foodBankSummary = document.querySelector("#foodBankSummary");
@@ -183,12 +207,17 @@
               const item = document.createElement("li");
               const title = document.createElement("h3");
               const address = document.createElement("p");
+              const distance = document.createElement("p");
               const hours = document.createElement("p");
               const mapLink = document.createElement("a");
 
               item.className = "resource-card";
               title.textContent = location.name;
               address.textContent = location.address;
+              distance.textContent =
+                typeof location.distanceMiles === "number"
+                  ? location.distanceMiles + " miles away"
+                  : "Distance unavailable";
               hours.textContent = location.hours
                 ? "Hours: " +
                   Object.entries(location.hours)
@@ -199,7 +228,8 @@
                 : "Hours: Not available";
 
               mapLink.className = "btn btn-outline";
-              mapLink.href = "map.html?resource=" + encodeURIComponent(location.id);
+              mapLink.href =
+                "map.html?resource=" + encodeURIComponent(location.id);
               mapLink.textContent = "View on map";
 
               if (location.website) {
@@ -211,9 +241,9 @@
                 website.rel = "noopener";
                 website.textContent = "Visit website";
 
-                item.append(title, address, hours, website, mapLink);
+                item.append(title, address, distance, hours, website, mapLink);
               } else {
-                item.append(title, address, hours, mapLink);
+                item.append(title, address, distance, hours, mapLink);
               }
 
               list.appendChild(item);
@@ -253,18 +283,9 @@
             alert("Saved!");
           });
 
-          findFreshBucks.addEventListener("click", function () {
-            const mapFilter = {
-              zipcode: matchData.formData.zipcode,
-              program: "Fresh Bucks",
-              purpose: "Use benefits",
-              distance: 5,
-            };
+          }
 
-            sessionStorage.setItem("mapFilter", JSON.stringify(mapFilter));
-            sessionStorage.setItem("currentCheck", JSON.stringify(matchData));
-            window.location.href = "map.html";
-          });
+          renderResults();
         }
       </script>
     </main>

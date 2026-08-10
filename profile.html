@@ -94,6 +94,7 @@
             const title = document.createElement("h3");
             const zipcode = document.createElement("p");
             const button = document.createElement("button");
+            const removeButton = document.createElement("button");
 
             title.textContent = "Saved search";
             zipcode.textContent =
@@ -110,8 +111,24 @@
               window.location.href = "match-result.html";
             });
 
+            removeButton.textContent = "Remove";
+            removeButton.className = "btn btn-outline";
+            removeButton.type = "button";
+
+            removeButton.addEventListener("click", function () {
+              const updatedChecks = savedChecks.filter(function (savedCheck) {
+                return savedCheck !== check;
+              });
+
+              localStorage.setItem(
+                "savedChecks",
+                JSON.stringify(updatedChecks),
+              );
+              item.remove();
+            });
+
             item.className = "saved-check-card";
-            item.append(title, zipcode, button);
+            item.append(title, zipcode, button, removeButton);
             list.appendChild(item);
           });
         </script>
@@ -125,44 +142,78 @@
             "#savedResourcesList",
           );
 
-          let savedResources = JSON.parse(
-            localStorage.getItem("savedResources") || "[]",
-          );
-
-          if (savedResources.length === 0) {
-            savedResourcesList.textContent = "No saved resources yet.";
-          }
-
-          savedResources.forEach(function (resource) {
-            const card = document.createElement("article");
-            const title = document.createElement("h3");
-            const status = document.createElement("p");
-            const button = document.createElement("button");
-
-            card.className = "saved-check-card";
-            title.textContent = resource.name;
-            status.textContent = "Status: " + resource.status;
-
-            button.textContent = "Remove";
-            button.className = "btn btn-outline";
-            button.type = "button";
-
-            button.addEventListener("click", function () {
-              savedResources = savedResources.filter(function (item) {
-                return item.id !== resource.id;
-              });
-
-              localStorage.setItem(
-                "savedResources",
-                JSON.stringify(savedResources),
+          async function loadSavedResources() {
+            try {
+              const savedResponse = await fetch(
+                "http://localhost:3000/api/saved-resources",
               );
 
-              card.remove();
-            });
+              const resourcesResponse = await fetch(
+                "http://localhost:3000/api/resources",
+              );
 
-            card.append(title, status, button);
-            savedResourcesList.appendChild(card);
-          });
+              const savedItems = await savedResponse.json();
+              const allResources = await resourcesResponse.json();
+
+              if (savedItems.length === 0) {
+                savedResourcesList.textContent = "No saved resources yet.";
+                return;
+              }
+
+              savedItems.forEach(function (savedItem) {
+                const resource = allResources.find(function (item) {
+                  return item.id === savedItem.resourceId;
+                });
+
+                if (!resource) {
+                  return;
+                }
+
+                const card = document.createElement("article");
+                const title = document.createElement("h3");
+                const status = document.createElement("p");
+                const mapLink = document.createElement("a");
+                const removeButton = document.createElement("button");
+
+                card.className = "saved-check-card";
+                title.textContent = resource.name;
+                status.textContent = resource.category;
+
+                mapLink.className = "btn btn-outline";
+                mapLink.href =
+                  "map.html?resource=" + encodeURIComponent(resource.id);
+                mapLink.textContent = "View on map";
+
+                removeButton.textContent = "Remove";
+                removeButton.className = "btn btn-outline";
+                removeButton.type = "button";
+
+                removeButton.addEventListener("click", async function () {
+                  const response = await fetch(
+                    "http://localhost:3000/api/saved-resources/" +
+                      savedItem._id,
+                    { method: "DELETE" },
+                  );
+
+                  if (!response.ok) {
+                    alert("Could not remove this saved resource.");
+                    return;
+                  }
+
+                  card.remove();
+                });
+
+                card.append(title, status, mapLink, removeButton);
+                savedResourcesList.appendChild(card);
+              });
+            } catch (error) {
+              console.error(error);
+              savedResourcesList.textContent =
+                "Could not load saved resources.";
+            }
+          }
+
+          loadSavedResources();
         </script>
       </div>
     </section>
