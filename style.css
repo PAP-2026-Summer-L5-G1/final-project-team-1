@@ -519,11 +519,15 @@ input:focus-visible,
 }
 
 .resource-card {
-  background: var(--paper);
+  background: var(--white);
   border-radius: var(--radius);
   border-top: 4px solid var(--leaf-light);
   padding: 16px;
   margin-bottom: 12px;
+}
+
+.resource-card .btn + .btn {
+  margin-left: 16px;
 }
 
 .resource-card-top {
@@ -543,6 +547,11 @@ input:focus-visible,
   padding: 3px 10px;
   border-radius: 999px;
   color: var(--white);
+}
+.matched-locations > .btn-primary {
+  display: flex;
+  width: fit-content;
+  margin-bottom: 24px;
 }
 
 .tag-market { background: var(--leaf); }
