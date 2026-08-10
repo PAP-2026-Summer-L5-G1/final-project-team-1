@@ -223,6 +223,16 @@
         >
           <span class="stamp-mark" aria-hidden="true">&#9733;</span> Save this spot
         </button>
+
+        <div class="note-field" data-field="noteField" hidden>
+          <label>
+            Note
+            <input type="text" data-field="noteInput" placeholder="e.g. go here Fridays" maxlength="140">
+          </label>
+          <button class="btn btn-outline" data-field="saveNote" type="button">
+            Save Note
+          </button>
+        </div>
       </div>
     </template>
 
@@ -233,7 +243,6 @@
       </div>
     </footer>
 
-    <!-- could remove this later, simply here because leaflet seems like best idea to use for map but idk -->
     <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="

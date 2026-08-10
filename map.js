@@ -1,6 +1,5 @@
 const API_BASE = "http://localhost:3000/api";
 
-// Maps each category from the database to what the UI expects
 const CATEGORY_META = {
   farmers_market: { filter: "farmers-market", label: "Farmers Market", tagClass: "tag-market", color: "#3C6B35" },
   food_bank: { filter: "food-bank", label: "Food Bank", tagClass: "tag-foodbank", color: "#E8C547" },
@@ -8,21 +7,26 @@ const CATEGORY_META = {
 };
 const DEFAULT_META = { filter: "retail", label: "Resource", tagClass: "tag-retail", color: "#6B9B5C" };
 
+const SAVED_COLOR = "#C81E3A";
+
 const DAY_LABELS = { mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun" };
 const DAY_ORDER = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
-// ---- State ----
 let map;
-let resources = [];               // everything from GET /api/resources
-let savedMap = new Map();         // resourceId -> saved-resource _id
-let markersById = new Map();      // resourceId -> Leaflet marker
-let activeFilter = "all";         // which chip is selected
-let activeTab = "nearby";         // "nearby"
-let zipQuery = "";                // current ZIP
+let resources = [];
+let savedMap = new Map();
+let markersById = new Map();
+let activeFilter = "all";
+let activeTab = "nearby";
+let zipQuery = "";
 
 
 function categoryMeta(category) {
   return CATEGORY_META[category] || DEFAULT_META;
+}
+
+function markerColor(resource) {
+  return savedMap.has(resource.id) ? SAVED_COLOR : categoryMeta(resource.category).color;
 }
 
 function formatHours(hours) {
@@ -32,7 +36,7 @@ function formatHours(hours) {
 }
 
 function matchesFilters(resource) {
-    if (!resource) return false;
+  if (!resource) return false;
   const meta = categoryMeta(resource.category);
 
   if (activeFilter !== "all" && meta.filter !== activeFilter) return false;
@@ -58,7 +62,7 @@ async function toggleFavorite(resourceId, buttonEl) {
 
   try {
     if (isSaved) {
-      const savedId = savedMap.get(resourceId);
+      const { savedId } = savedMap.get(resourceId);
       await fetch(`${API_BASE}/saved-resources/${savedId}`, { method: "DELETE" });
       savedMap.delete(resourceId);
       syncFavoriteButtons(resourceId, false);
@@ -69,14 +73,36 @@ async function toggleFavorite(resourceId, buttonEl) {
         body: JSON.stringify({ resourceId }),
       });
       const saved = await res.json();
-      savedMap.set(resourceId, saved._id);
+      savedMap.set(resourceId, { savedId: saved._id, note: saved.note || "" });
       syncFavoriteButtons(resourceId, true);
     }
 
     updateSavedCount();
     applyFilters();
+
+    const marker = markersById.get(resourceId);
+    const resource = resources.find((r) => r.id === resourceId);
+    if (marker && resource) {
+      marker.setStyle({ fillColor: markerColor(resource) });
+    }
   } catch (err) {
     console.error("Failed to update favorite:", err);
+  }
+}
+
+async function updateNote(resourceId, newNote) {
+  const entry = savedMap.get(resourceId);
+  if (!entry) return;
+
+  try {
+    await fetch(`${API_BASE}/saved-resources/${entry.savedId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ note: newNote }),
+    });
+    entry.note = newNote;
+  } catch (err) {
+    console.error("Failed to update note:", err);
   }
 }
 
@@ -102,23 +128,40 @@ function buildDetailElement(resource, marker) {
     websiteEl.remove();
   }
 
+  const savedEntry = savedMap.get(resource.id);
+  const isSaved = Boolean(savedEntry);
+
+  const noteField = root.querySelector('[data-field="noteField"]');
+  const noteInput = root.querySelector('[data-field="noteInput"]');
+  const saveNoteBtn = root.querySelector('[data-field="saveNote"]');
+
+  noteField.hidden = !isSaved;
+  noteInput.value = savedEntry ? savedEntry.note : "";
+
+  saveNoteBtn.addEventListener("click", () => {
+    updateNote(resource.id, noteInput.value.trim());
+  });
+
   const favBtn = root.querySelector('[data-field="favoriteToggle"]');
   favBtn.dataset.id = resource.id;
-  favBtn.setAttribute("aria-pressed", String(savedMap.has(resource.id)));
-  favBtn.addEventListener("click", () => toggleFavorite(resource.id, favBtn));
+  favBtn.setAttribute("aria-pressed", String(isSaved));
+  favBtn.addEventListener("click", () => {
+    toggleFavorite(resource.id, favBtn).then(() => {
+      noteField.hidden = !savedMap.has(resource.id);
+      noteInput.value = savedMap.has(resource.id) ? savedMap.get(resource.id).note : "";
+    });
+  });
 
   root.querySelector(".detail-close").addEventListener("click", () => marker.closePopup());
 
   return root;
 }
 
-// Map building
-
 function initMap() {
   const mapEl = document.getElementById("map");
   mapEl.innerHTML = "";
 
-  map = L.map(mapEl).setView([47.6062, -122.3321], 11); // centered on Seattle
+  map = L.map(mapEl).setView([47.6062, -122.3321], 11);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors",
@@ -128,14 +171,13 @@ function initMap() {
 
 function renderMarkers() {
   resources.forEach((resource) => {
-    if (typeof resource.lat !== "number" || typeof resource.lng !== "number") return; // skip things without coordinates
+    if (typeof resource.lat !== "number" || typeof resource.lng !== "number") return;
 
-    const meta = categoryMeta(resource.category);
     const marker = L.circleMarker([resource.lat, resource.lng], {
       radius: 8,
       color: "#fff",
       weight: 2,
-      fillColor: meta.color,
+      fillColor: markerColor(resource),
       fillOpacity: 0.9,
     });
 
@@ -145,8 +187,6 @@ function renderMarkers() {
 
   applyFilters();
 }
-
-// sidebar
 
 function createResourceCard(resource) {
   const meta = categoryMeta(resource.category);
@@ -206,13 +246,11 @@ function renderList() {
 
 
 function applyFilters() {
-  // Sidebar cards
   document.querySelectorAll(".resource-card").forEach((card) => {
     const resource = resources.find((r) => r.id === card.dataset.id);
     card.hidden = !matchesFilters(resource);
   });
 
-  // Map markers
   markersById.forEach((marker, id) => {
     const resource = resources.find((r) => r.id === id);
     const shouldShow = matchesFilters(resource);
@@ -297,7 +335,7 @@ async function init() {
 
     resources = await resourcesRes.json();
     const savedList = await savedRes.json();
-    savedMap = new Map(savedList.map((s) => [s.resourceId, s._id]));
+    savedMap = new Map(savedList.map((s) => [s.resourceId, { savedId: s._id, note: s.note || "" }]));
   } catch (err) {
     console.error("Failed to load data from the API:", err);
     return;
