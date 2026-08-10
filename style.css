@@ -962,3 +962,25 @@ input:focus-visible,
   font-weight: 700;
   cursor: pointer;
 }
+
+.note-field {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.note-field label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  margin-bottom: 6px;
+}
+
+.note-field input {
+  width: 100%;
+  font-family: var(--font-body);
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
