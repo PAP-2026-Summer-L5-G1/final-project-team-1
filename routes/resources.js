@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { getDB } = require("../db/connection");
 
-// GET /api/resources — list everything
+// GET /api/resources
 router.get("/", async (req, res) => {
   try {
     const results = await getDB().collection("resources").find({}).toArray();
@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/resources/:id — one resource by its short id (e.g. "frb-centralcoop")
+// GET /api/resources/:id
 router.get("/:id", async (req, res) => {
   try {
     const result = await getDB().collection("resources").findOne({ id: req.params.id });
@@ -23,7 +23,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST /api/resources — add a new one
+// POST /api/resources
 router.post("/", async (req, res) => {
   try {
     const result = await getDB().collection("resources").insertOne(req.body);
@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PATCH /api/resources/:id — update fields on an existing one
+// PATCH /api/resources/:id
 router.patch("/:id", async (req, res) => {
   try {
     const result = await getDB()

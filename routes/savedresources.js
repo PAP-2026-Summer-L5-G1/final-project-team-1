@@ -3,7 +3,7 @@ const router = express.Router();
 const { getDB } = require("../db/connection");
 const { ObjectId } = require("mongodb");
 
-// GET /api/saved-resources — everything currently saved
+// GET /api/saved-resources
 router.get("/", async (req, res) => {
   try {
     const results = await getDB().collection("saved_resources").find({}).toArray();
@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST /api/saved-resources — save one (favorite button hits this)
+// POST /api/saved-resources
 router.post("/", async (req, res) => {
   try {
     const doc = {
@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PATCH /api/saved-resources/:id — edit the note on a saved entry
+// PATCH /api/saved-resources/:id
 router.patch("/:id", async (req, res) => {
   try {
     const result = await getDB()
@@ -44,7 +44,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-// DELETE /api/saved-resources/:id — un-favorite
+// DELETE /api/saved-resources/:id
 router.delete("/:id", async (req, res) => {
   try {
     const result = await getDB()

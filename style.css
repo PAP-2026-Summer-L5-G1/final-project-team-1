@@ -11,6 +11,7 @@
   --tomato:     #D45F45;   /* favorites, alerts */
   --line:       #D8CFB8;   /* dividers */
   --white:      #FFFEFB;
+  --pumpkin:    #D9812F;
 
   --font-display: "Fraunces", Georgia, serif;
   --font-title: "Rowdies", sans-serif;
@@ -546,7 +547,7 @@ input:focus-visible,
 
 .tag-market { background: var(--leaf); }
 .tag-foodbank { background: var(--harvest); color: var(--ink); }
-.tag-retail { background: var(--leaf-light); }
+.tag-retail { background: var(--pumpkin); }
 
 .empty-state {
   font-family: var(--font-mono);
@@ -611,7 +612,7 @@ input:focus-visible,
 
 .dot-market { background: var(--leaf); }
 .dot-foodbank { background: var(--harvest); }
-.dot-retail { background: var(--leaf-light); }
+.dot-retail { background: var(--pumpkin); }
 .dot-saved { background: var(--tomato); }
 
 .resource-detail {
@@ -821,7 +822,7 @@ input:focus-visible,
   width: 181px;
 }
 
-.form-page #income, 
+.form-page #income,
 .form-page #zipcode {
   width: 302px;
 }

@@ -11,9 +11,9 @@ const client = new MongoClient(process.env.MONGO_URI, {
 let db;
 
 async function connectDB() {
-  if (db) return db; // already connected, reuse it
+  if (db) return db;
   await client.connect();
-  db = client.db("freshaccess"); // database name — change if you want a different one
+  db = client.db("freshaccess");
   console.log("Connected to MongoDB");
   return db;
 }
