@@ -199,7 +199,7 @@
                 : "Hours: Not available";
 
               mapLink.className = "btn btn-outline";
-              mapLink.href = "map.html";
+              mapLink.href = "map.html?resource=" + encodeURIComponent(location.id);
               mapLink.textContent = "View on map";
 
               if (location.website) {

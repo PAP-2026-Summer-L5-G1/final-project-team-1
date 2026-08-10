@@ -264,6 +264,27 @@ function wireZipSearch() {
   });
 }
 
+function focusRequestedResource() {
+  const params = new URLSearchParams(window.location.search);
+  const resourceId = params.get("resource");
+  if (!resourceId) {
+    return;
+  }
+  const marker = markersById.get(resourceId);
+  map.setView(marker.getLatLng(), 15);
+  marker.openPopup();
+  const cards = document.querySelectorAll(".resource-card");
+  for (let i = 0; i < cards.length; i++) {
+    if (cards[i].dataset.id === resourceId) {
+      cards[i].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+      break;
+    }
+  }
+}
+
 
 async function init() {
   initMap();
@@ -288,6 +309,7 @@ async function init() {
   wireFilterChips();
   wireTabs();
   wireZipSearch();
+  focusRequestedResource();
 }
 
 document.addEventListener("DOMContentLoaded", init);
