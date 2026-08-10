@@ -8,6 +8,8 @@ const CATEGORY_META = {
 };
 const DEFAULT_META = { filter: "retail", label: "Resource", tagClass: "tag-retail", color: "#6B9B5C" };
 
+const SAVED_COLOR = "#C81E3A"; // matches --tomato
+
 const DAY_LABELS = { mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun" };
 const DAY_ORDER = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
@@ -23,6 +25,10 @@ let zipQuery = "";                // current ZIP
 
 function categoryMeta(category) {
   return CATEGORY_META[category] || DEFAULT_META;
+}
+
+function markerColor(resource) {
+  return savedMap.has(resource.id) ? SAVED_COLOR : categoryMeta(resource.category).color;
 }
 
 function formatHours(hours) {
@@ -75,6 +81,12 @@ async function toggleFavorite(resourceId, buttonEl) {
 
     updateSavedCount();
     applyFilters();
+
+    const marker = markersById.get(resourceId);
+    const resource = resources.find((r) => r.id === resourceId);
+    if (marker && resource) {
+      marker.setStyle({ fillColor: markerColor(resource) });
+    }
   } catch (err) {
     console.error("Failed to update favorite:", err);
   }
@@ -135,7 +147,7 @@ function renderMarkers() {
       radius: 8,
       color: "#fff",
       weight: 2,
-      fillColor: meta.color,
+      fillColor: markerColor(resource),
       fillOpacity: 0.9,
     });
 
