@@ -47,8 +47,12 @@ function matchesFilters(resource) {
 }
 
 function syncFavoriteButtons(resourceId, isSaved) {
-  document.querySelectorAll(`.favorite-stamp[data-id="${resourceId}"]`).forEach((btn) => {
+  document.querySelectorAll(`[data-id="${resourceId}"][aria-pressed]`).forEach((btn) => {
     btn.setAttribute("aria-pressed", String(isSaved));
+
+    if (btn.classList.contains("popup-save")) {
+      btn.textContent = isSaved ? "Saved" : "Save this spot";
+    }
   });
 }
 
@@ -57,7 +61,7 @@ function updateSavedCount() {
   if (countEl) countEl.textContent = savedMap.size;
 }
 
-async function toggleFavorite(resourceId, buttonEl) {
+async function toggleFavorite(resourceId, buttonEl, note) {
   const isSaved = buttonEl.getAttribute("aria-pressed") === "true";
 
   try {
@@ -70,7 +74,10 @@ async function toggleFavorite(resourceId, buttonEl) {
       const res = await fetch(`${API_BASE}/saved-resources`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resourceId }),
+        body: JSON.stringify({
+          resourceId: resourceId,
+          note: note,
+        }),
       });
       const saved = await res.json();
       savedMap.set(resourceId, { savedId: saved._id, note: saved.note || "" });
@@ -90,21 +97,7 @@ async function toggleFavorite(resourceId, buttonEl) {
   }
 }
 
-async function updateNote(resourceId, newNote) {
-  const entry = savedMap.get(resourceId);
-  if (!entry) return;
 
-  try {
-    await fetch(`${API_BASE}/saved-resources/${entry.savedId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ note: newNote }),
-    });
-    entry.note = newNote;
-  } catch (err) {
-    console.error("Failed to update note:", err);
-  }
-}
 
 
 function buildDetailElement(resource, marker) {
@@ -133,26 +126,16 @@ function buildDetailElement(resource, marker) {
 
   const noteField = root.querySelector('[data-field="noteField"]');
   const noteInput = root.querySelector('[data-field="noteInput"]');
-  const saveNoteBtn = root.querySelector('[data-field="saveNote"]');
-
-  noteField.hidden = !isSaved;
-  noteInput.value = savedEntry ? savedEntry.note : "";
-
-  saveNoteBtn.addEventListener("click", () => {
-    updateNote(resource.id, noteInput.value.trim());
-  });
+  
 
   const favBtn = root.querySelector('[data-field="favoriteToggle"]');
   favBtn.dataset.id = resource.id;
   favBtn.setAttribute("aria-pressed", String(isSaved));
   favBtn.addEventListener("click", () => {
-    toggleFavorite(resource.id, favBtn).then(() => {
-      noteField.hidden = !savedMap.has(resource.id);
-      noteInput.value = savedMap.has(resource.id) ? savedMap.get(resource.id).note : "";
-    });
-  });
+  const note = noteInput.value.trim();
 
-  root.querySelector(".detail-close").addEventListener("click", () => marker.closePopup());
+  toggleFavorite(resource.id, favBtn, note);
+});
 
   return root;
 }
@@ -241,7 +224,16 @@ function createResourceCard(resource) {
 function renderList() {
   const list = document.getElementById("resourceList");
   list.innerHTML = "";
-  resources.forEach((resource) => list.appendChild(createResourceCard(resource)));
+  const resourcesInOrder = [...resources].sort(function (
+  firstResource,
+  secondResource,
+) {
+  return firstResource.name.localeCompare(secondResource.name);
+});
+
+resourcesInOrder.forEach(function (resource) {
+  list.appendChild(createResourceCard(resource));
+});
 }
 
 

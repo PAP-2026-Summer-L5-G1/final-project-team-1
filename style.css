@@ -984,3 +984,134 @@ input:focus-visible,
   border-radius: 999px;
   margin-bottom: 8px;
 }
+
+/* Map popup */
+
+.leaflet-popup-content-wrapper {
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(35, 40, 28, 0.2);
+}
+
+.leaflet-popup-content {
+  width: min(320px, calc(100vw - 72px)) !important;
+  margin: 0;
+}
+
+.leaflet-popup-close-button {
+  color: var(--ink) !important;
+  font-size: 26px !important;
+  padding: 10px 12px 0 0 !important;
+}
+
+.resource-detail {
+  max-width: none;
+  padding: 24px;
+}
+
+.resource-detail .tag {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.resource-detail h3 {
+  padding-right: 24px;
+  margin-bottom: 18px;
+}
+
+.resource-detail p {
+  margin-bottom: 14px;
+}
+
+.resource-detail a {
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.popup-save {
+  width: 100%;
+  justify-content: center;
+}
+
+.popup-save[aria-pressed="true"] {
+  background: var(--tomato);
+  border-color: var(--tomato);
+  color: var(--white);
+}
+
+
+/* Profile */
+
+.profile-intro {
+  padding: 52px 0 28px;
+}
+
+.profile-intro .sub {
+  max-width: 620px;
+  font-size: 1.05rem;
+}
+
+.profile-layout {
+  margin-bottom: 52px;
+}
+
+.profile-layout .form-card,
+.saved-check-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.profile-layout .form-card {
+  padding: 28px;
+}
+
+.profile-layout .form-card p {
+  max-width: 52ch;
+}
+
+.profile-layout .form-card {
+  max-width: 680px;
+}
+
+.saved-content {
+  padding-bottom: 64px;
+}
+
+.saved-content > h2 {
+  margin-top: 44px;
+}
+
+.saved-description {
+  color: #4b5142;
+  margin-bottom: 18px;
+}
+
+.saved-check-card {
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+.saved-check-card h3 {
+  margin-bottom: 6px;
+}
+
+.saved-check-card p {
+  color: #4b5142;
+}
+
+.saved-resource-note {
+  padding-left: 12px;
+  border-left: 3px solid var(--harvest);
+  font-style: italic;
+}
+
+.saved-check-card .btn {
+  margin: 4px 8px 0 0;
+}
+
+@media (max-width: 700px) {
+  .profile-layout .form-card {
+    padding: 22px;
+  }
+}

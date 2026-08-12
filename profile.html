@@ -42,30 +42,20 @@
       <div class="wrap">
         <h1>Your profile</h1>
         <p class="sub">
-          Programs you're enrolled in and fast eligibility checks.
+          Check your eligibility and revisit your saved searches and resources.
         </p>
       </div>
     </section>
 
     <div class="wrap">
       <div class="profile-layout">
-        <div class="profile-card">
-          <div class="avatar">Profile Icon Here</div>
-          <h3 style="margin-bottom: 2px">Curr Example</h3>
-          <p class="market-meta" style="margin-bottom: 0">
-            Seattle, WA &middot; 98115
-          </p>
-          <span class="section-label" style="margin-top: 20px"
-            >Programs you're currently in</span
-          >
-        </div>
-
         <div class="form-card">
           <h2>Check your eligibility</h2>
           <p>
             Enter a few details and we'll show which programs and nearby markets
             match your household.
           </p>
+          <a class="btn btn-primary" href="form.html">Check eligibility</a>
         </div>
       </div>
     </div>
@@ -172,12 +162,18 @@
                 const card = document.createElement("article");
                 const title = document.createElement("h3");
                 const status = document.createElement("p");
+                const note = document.createElement("p");
                 const mapLink = document.createElement("a");
                 const removeButton = document.createElement("button");
 
                 card.className = "saved-check-card";
                 title.textContent = resource.name;
                 status.textContent = resource.category;
+
+                if (savedItem.note) {
+                  note.className = "saved-resource-note";
+                  note.textContent = "Note: " + savedItem.note;
+                }
 
                 mapLink.className = "btn btn-outline";
                 mapLink.href =
@@ -203,7 +199,13 @@
                   card.remove();
                 });
 
-                card.append(title, status, mapLink, removeButton);
+                card.append(title, status);
+
+                if (savedItem.note) {
+                  card.append(note);
+                }
+
+                card.append(mapLink, removeButton);
                 savedResourcesList.appendChild(card);
               });
             } catch (error) {

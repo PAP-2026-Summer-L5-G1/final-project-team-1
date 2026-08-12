@@ -221,32 +221,30 @@
 
     <template id="resourceDetailTemplate">
       <div class="resource-detail">
-        <button class="detail-close" type="button" aria-label="Close">
-          &times;
-        </button>
         <span class="tag" data-field="type"></span>
         <h3 data-field="name"></h3>
         <p data-field="hours"></p>
         <p data-field="address"></p>
         <a data-field="website" target="_blank" rel="noopener">Visit website</a>
         <button
-          class="favorite-stamp"
+          class="btn btn-outline popup-save"
           data-field="favoriteToggle"
           type="button"
           aria-pressed="false"
         >
-          <span class="stamp-mark" aria-hidden="true">&#9733;</span> Save this
-          spot
+          Save this spot
         </button>
 
-        <div class="note-field" data-field="noteField" hidden>
+        <div class="note-field" data-field="noteField">
           <label>
-            Note
-            <input type="text" data-field="noteInput" placeholder="e.g. go here Fridays" maxlength="140">
+            Optional note
+            <input
+              type="text"
+              data-field="noteInput"
+              placeholder="e.g. Go here on Fridays"
+              maxlength="140"
+            />
           </label>
-          <button class="btn btn-outline" data-field="saveNote" type="button">
-            Save Note
-          </button>
         </div>
       </div>
     </template>
