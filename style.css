@@ -171,6 +171,11 @@ input:focus-visible,
   align-items: center;
 }
 
+.hero .wrap img {
+  padding: 0 16px;
+  max-width: 480px;
+}
+
 .hero h1 { color: var(--white); }
 
 .hero p.lead {
