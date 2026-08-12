@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Rowdies:wght@300;400;700&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Rowdies:wght@300;400;700&display=swap"
       rel="stylesheet"
-    >
+    />
     <title>Resource Matches</title>
   </head>
 
@@ -113,17 +113,25 @@
         </article>
       </section>
 
-      <section class="matched-locations section">
+      <nav class="result-category-links" aria-label="Jump to resource results">
+        <a class="btn btn-outline" href="#freshBucksLocations">
+          Fresh Bucks · <span id="freshBucksCount">0</span> locations
+        </a>
+
+        <a class="btn btn-outline" href="#foodBankResults">
+          Food Banks · <span id="foodBankCount">0</span> locations
+        </a>
+      </nav>
+
+      <section id="freshBucksLocations" class="matched-locations section">
         <h2>Fresh Bucks locations</h2>
         <p id="locationsSummary"></p>
-        <a class="btn btn-primary" href="map.html"> Open map </a>
         <ul id="matchedLocations" class="marker-list"></ul>
       </section>
 
-      <section class="matched-locations section">
+      <section id="foodBankResults" class="matched-locations section">
         <h2>Food banks</h2>
         <p id="foodBankSummary"></p>
-        <a class="btn btn-primary" href="map.html"> Open map </a>
         <ul id="foodBankLocations" class="marker-list"></ul>
       </section>
 
@@ -134,40 +142,6 @@
           window.location.href = "form.html";
         } else {
           const matchData = JSON.parse(savedMatchData);
-
-          async function refreshDistancesIfNeeded() {
-            const locations = matchData.result.locations || [];
-            const foodBanks = matchData.result.foodBankLocations || [];
-            const allLocations = locations.concat(foodBanks);
-            const hasDistances = allLocations.every(function (location) {
-              return typeof location.distanceMiles === "number";
-            });
-
-            if (hasDistances) {
-              return;
-            }
-
-            try {
-              const response = await fetch("http://localhost:3000/api/matches", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(matchData.formData),
-              });
-
-              if (!response.ok) {
-                throw new Error("Could not refresh result distances");
-              }
-
-              matchData.result = await response.json();
-              sessionStorage.setItem("matchData", JSON.stringify(matchData));
-            } catch (error) {
-              console.error(error);
-            }
-          }
-
-          async function renderResults() {
-          await refreshDistancesIfNeeded();
-
           const summary = document.querySelector("#userSummary");
           const editAnswers = document.querySelector("#editAnswers");
           const saveButton = document.querySelector("#saveFreshBucks");
@@ -177,7 +151,8 @@
           const foodBankSummary = document.querySelector("#foodBankSummary");
           const foodBankLocationsList =
             document.querySelector("#foodBankLocations");
-
+          const freshBucksCount = document.querySelector("#freshBucksCount");
+          const foodBankCount = document.querySelector("#foodBankCount");
           const snapText =
             matchData.formData.snap === "yes"
               ? "Currently receiving SNAP"
@@ -198,6 +173,7 @@
           }
 
           const locations = matchData.result.locations || [];
+          freshBucksCount.textContent = locations.length;
 
           locationsSummary.textContent =
             locations.length + " Fresh Bucks locations found.";
@@ -207,17 +183,12 @@
               const item = document.createElement("li");
               const title = document.createElement("h3");
               const address = document.createElement("p");
-              const distance = document.createElement("p");
               const hours = document.createElement("p");
               const mapLink = document.createElement("a");
 
               item.className = "resource-card";
               title.textContent = location.name;
               address.textContent = location.address;
-              distance.textContent =
-                typeof location.distanceMiles === "number"
-                  ? location.distanceMiles + " miles away"
-                  : "Distance unavailable";
               hours.textContent = location.hours
                 ? "Hours: " +
                   Object.entries(location.hours)
@@ -241,9 +212,9 @@
                 website.rel = "noopener";
                 website.textContent = "Visit website";
 
-                item.append(title, address, distance, hours, website, mapLink);
+                item.append(title, address, hours, website, mapLink);
               } else {
-                item.append(title, address, distance, hours, mapLink);
+                item.append(title, address, hours, mapLink);
               }
 
               list.appendChild(item);
@@ -253,6 +224,7 @@
           showLocations(locations, matchedLocations);
 
           const foodBankLocations = matchData.result.foodBankLocations || [];
+          foodBankCount.textContent = foodBankLocations.length;
 
           foodBankSummary.textContent =
             foodBankLocations.length + " food banks found.";
@@ -282,10 +254,6 @@
 
             alert("Saved!");
           });
-
-          }
-
-          renderResults();
         }
       </script>
     </main>

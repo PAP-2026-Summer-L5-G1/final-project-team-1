@@ -870,6 +870,23 @@ input:focus-visible,
   background: var(--leaf);
 }
 
+.form-page input[type="number"] {
+  display: block;
+  height: 41px;
+  margin-bottom: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 24px;
+  background: #d9d9d9;
+  font-family: var(--font-display);
+}
+
+.form-page input[type="number"]::-webkit-inner-spin-button,
+.form-page input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
 .form-button {
   display: block;
   margin: 12px auto 0;
@@ -1119,4 +1136,20 @@ input:focus-visible,
   .profile-layout .form-card {
     padding: 22px;
   }
+}
+
+/* --- Saved Resources --- */
+.result-category-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0 12px;
+}
+
+#foodBankResults {
+  scroll-margin-top: 90px;
+}
+
+#freshBucksLocations {
+  scroll-margin-top: 90px;
 }
