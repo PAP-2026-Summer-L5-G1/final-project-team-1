@@ -172,8 +172,17 @@ input:focus-visible,
 }
 
 .hero .wrap img {
-  padding: 0 16px;
-  max-width: 480px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero .wrap > div:last-child {
+  width: 480px;
+  height: 360px;
+  overflow: hidden;
+  border-radius: 20px;
 }
 
 .hero h1 { color: var(--white); }
@@ -251,6 +260,11 @@ input:focus-visible,
   padding: 26px 24px;
   box-shadow: var(--shadow);
   border-top: 4px solid var(--leaf-light);
+}
+
+#matchesList {
+  display: grid;
+  gap: 22px;
 }
 
 .feature-card .verb {
@@ -1119,6 +1133,15 @@ input:focus-visible,
 .saved-description {
   color: #4b5142;
   margin-bottom: 18px;
+}
+
+.saved-resource-group {
+  margin-top: 30px;
+}
+
+.saved-resource-group > h3 {
+  margin-bottom: 14px;
+  color: var(--leaf);
 }
 
 .saved-check-card {

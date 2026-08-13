@@ -42,7 +42,7 @@
       <div class="wrap">
         <h1>Your profile</h1>
         <p class="sub">
-          Check your eligibility and revisit your saved searches and resources.
+          Check your eligibility and revisit your saved resources.
         </p>
       </div>
     </section>
@@ -61,69 +61,6 @@
     </div>
 
     <section class="wrap saved-content">
-      <h2>Saved searches</h2>
-
-      <p class="saved-description">
-        Your previous eligibility checks are saved here.
-      </p>
-
-      <div id="savedChecksList">
-        <script>
-          const savedChecks = JSON.parse(
-            localStorage.getItem("savedChecks") || "[]",
-          );
-
-          const list = document.querySelector("#savedChecksList");
-
-          if (savedChecks.length === 0) {
-            list.textContent = "No saved searches yet.";
-          }
-
-          savedChecks.forEach((check) => {
-            const item = document.createElement("article");
-            const title = document.createElement("h3");
-            const zipcode = document.createElement("p");
-            const button = document.createElement("button");
-            const removeButton = document.createElement("button");
-
-            title.textContent = "Saved search";
-            zipcode.textContent =
-              `Household of ${check.formData.members} · ` +
-              `ZIP code: ${check.formData.zipcode}`;
-
-            button.type = "button";
-            button.className = "btn btn-outline";
-            button.textContent = "View match results";
-
-            button.addEventListener("click", () => {
-              sessionStorage.setItem("matchData", JSON.stringify(check));
-
-              window.location.href = "match-result.html";
-            });
-
-            removeButton.textContent = "Remove";
-            removeButton.className = "btn btn-outline";
-            removeButton.type = "button";
-
-            removeButton.addEventListener("click", function () {
-              const updatedChecks = savedChecks.filter(function (savedCheck) {
-                return savedCheck !== check;
-              });
-
-              localStorage.setItem(
-                "savedChecks",
-                JSON.stringify(updatedChecks),
-              );
-              item.remove();
-            });
-
-            item.className = "saved-check-card";
-            item.append(title, zipcode, button, removeButton);
-            list.appendChild(item);
-          });
-        </script>
-      </div>
-
       <h2>Saved resources</h2>
 
       <div id="savedResourcesList">
@@ -131,6 +68,30 @@
           const savedResourcesList = document.querySelector(
             "#savedResourcesList",
           );
+
+          function formatHours(hours) {
+            if (!hours) return "Hours not listed";
+
+            const dayLabels = {
+              mon: "Mon",
+              tue: "Tue",
+              wed: "Wed",
+              thu: "Thu",
+              fri: "Fri",
+              sat: "Sat",
+              sun: "Sun",
+            };
+            const dayOrder = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+            const parts = dayOrder
+              .filter(function (day) {
+                return hours[day];
+              })
+              .map(function (day) {
+                return dayLabels[day] + " " + hours[day];
+              });
+
+            return parts.length ? parts.join(" · ") : "Hours not listed";
+          }
 
           async function loadSavedResources() {
             try {
@@ -150,6 +111,32 @@
                 return;
               }
 
+              const categoryLabels = {
+                farmers_market: "Farmers Markets",
+                food_bank: "Food Banks",
+                retailer: "Retailers",
+              };
+              const categoryGroups = {};
+
+              function getCategoryGroup(category) {
+                if (categoryGroups[category]) {
+                  return categoryGroups[category];
+                }
+
+                const group = document.createElement("section");
+                const heading = document.createElement("h3");
+                const cards = document.createElement("div");
+
+                group.className = "saved-resource-group";
+                heading.textContent = categoryLabels[category] || "Other Resources";
+                cards.className = "saved-resource-cards";
+                group.append(heading, cards);
+                savedResourcesList.appendChild(group);
+                categoryGroups[category] = cards;
+
+                return cards;
+              }
+
               savedItems.forEach(function (savedItem) {
                 const resource = allResources.find(function (item) {
                   return item.id === savedItem.resourceId;
@@ -162,13 +149,20 @@
                 const card = document.createElement("article");
                 const title = document.createElement("h3");
                 const status = document.createElement("p");
+                const details = document.createElement("p");
                 const note = document.createElement("p");
                 const mapLink = document.createElement("a");
                 const removeButton = document.createElement("button");
 
                 card.className = "saved-check-card";
                 title.textContent = resource.name;
-                status.textContent = resource.category;
+                status.textContent =
+                  categoryLabels[resource.category] || "Other Resource";
+                const freshBucks = resource.accepts_fresh_bucks
+                  ? " · Accepts Fresh Bucks"
+                  : "";
+                details.textContent =
+                  formatHours(resource.hours) + freshBucks;
 
                 if (savedItem.note) {
                   note.className = "saved-resource-note";
@@ -199,14 +193,14 @@
                   card.remove();
                 });
 
-                card.append(title, status);
+                card.append(title, status, details);
 
                 if (savedItem.note) {
                   card.append(note);
                 }
 
                 card.append(mapLink, removeButton);
-                savedResourcesList.appendChild(card);
+                getCategoryGroup(resource.category).appendChild(card);
               });
             } catch (error) {
               console.error(error);
