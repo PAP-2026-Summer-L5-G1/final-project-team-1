@@ -59,16 +59,6 @@
         <article class="feature-card">
           <div class="resource-card-top">
             <h2>Fresh Bucks</h2>
-
-            <button
-              id="saveFreshBucks"
-              class="favorite-stamp"
-              type="button"
-              aria-pressed="false"
-              aria-label="Save Fresh Bucks"
-            >
-              <span class="stamp-mark">★</span>
-            </button>
           </div>
 
           <p>
@@ -84,7 +74,10 @@
           </p>
 
           <h3>Why it may fit you</h3>
-          <p>You live in Seattle and reported that you are receiving SNAP.</p>
+          <p>
+            You live in Seattle and reported that you meet SNAP eligibility
+            requirements.
+          </p>
 
           <h3>What it may provide</h3>
           <p>Support for buying fruits and vegetables.</p>
@@ -108,6 +101,91 @@
               rel="noopener"
             >
               Learn about Fresh Bucks
+            </a>
+          </div>
+        </article>
+
+        <article id="basicFoodCard" class="feature-card" hidden>
+          <div class="resource-card-top">
+            <h2>SNAP / Basic Food</h2>
+          </div>
+
+          <p>
+            <strong>Status:</strong>
+            <span id="basicFoodStatus" class="tag tag-foodbank">
+              Possible Match
+            </span>
+          </p>
+
+          <p>
+            Basic Food is Washington's SNAP food-assistance program. It can help
+            eligible households buy groceries.
+          </p>
+
+          <h3>Why it may fit you</h3>
+          <p id="basicFoodReason">
+            We will use your answers to identify whether this program may be
+            worth exploring.
+          </p>
+          <p>
+            <a
+              href="https://www.dshs.wa.gov/esa/community-services-offices/basic-food"
+              target="_blank"
+              rel="noopener"
+            >
+              Review DSHS official guidance
+            </a>
+          </p>
+
+          <h3>What you may need</h3>
+          <p>
+            Identity, household, income, and residency information may be
+            required when applying.
+          </p>
+
+          <p class="disclaimer">
+            Eligibility and benefit amounts are determined by the official
+            program provider.
+          </p>
+
+          <div class="hero-actions">
+            <a
+              class="btn btn-outline"
+              href="https://www.dshs.wa.gov/esa/community-services-offices/basic-food"
+              target="_blank"
+              rel="noopener"
+            >
+              Learn about Basic Food
+            </a>
+          </div>
+        </article>
+
+        <article id="wicCard" class="feature-card" hidden>
+          <div class="resource-card-top">
+            <h2>WIC</h2>
+          </div>
+
+          <p>
+            <strong>Status:</strong>
+            <span id="wicStatus" class="tag tag-market">Possible Match</span>
+          </p>
+
+          <p>
+            WIC provides healthy foods, nutrition education, health screenings,
+            and breastfeeding support for eligible families.
+          </p>
+
+          <h3>Why it may fit you</h3>
+          <p id="wicReason"></p>
+
+          <div class="hero-actions">
+            <a
+              class="btn btn-outline"
+              href="https://doh.wa.gov/you-and-your-family/wic/wic-eligibility"
+              target="_blank"
+              rel="noopener"
+            >
+              Learn about WIC
             </a>
           </div>
         </article>
@@ -144,23 +222,24 @@
           const matchData = JSON.parse(savedMatchData);
           const summary = document.querySelector("#userSummary");
           const editAnswers = document.querySelector("#editAnswers");
-          const saveButton = document.querySelector("#saveFreshBucks");
           const freshBucksStatus = document.querySelector("#freshBucksStatus");
+          const basicFoodCard = document.querySelector("#basicFoodCard");
+          const basicFoodStatus = document.querySelector("#basicFoodStatus");
+          const basicFoodReason = document.querySelector("#basicFoodReason");
           const locationsSummary = document.querySelector("#locationsSummary");
           const matchedLocations = document.querySelector("#matchedLocations");
           const foodBankSummary = document.querySelector("#foodBankSummary");
+          const wicCard = document.querySelector("#wicCard");
+          const wicStatus = document.querySelector("#wicStatus");
+          const wicReason = document.querySelector("#wicReason");
           const foodBankLocationsList =
             document.querySelector("#foodBankLocations");
           const freshBucksCount = document.querySelector("#freshBucksCount");
           const foodBankCount = document.querySelector("#foodBankCount");
-          const snapText =
-            matchData.formData.snap === "yes"
-              ? "Currently receiving SNAP"
-              : "Not currently receiving SNAP";
 
           summary.textContent =
             `Household of ${matchData.formData.members} · ` +
-            `ZIP ${matchData.formData.zipcode} · ${snapText}`;
+            `ZIP ${matchData.formData.zipcode}`;
 
           const freshBucksProgram = matchData.result.programs.find(
             function (program) {
@@ -170,6 +249,28 @@
 
           if (freshBucksProgram) {
             freshBucksStatus.textContent = freshBucksProgram.status;
+          }
+
+          const basicFoodProgram = matchData.result.programs.find(
+            function (program) {
+              return program.id === "basic-food";
+            },
+          );
+
+          if (basicFoodProgram) {
+            basicFoodCard.hidden = false;
+            basicFoodStatus.textContent = basicFoodProgram.status;
+            basicFoodReason.textContent = basicFoodProgram.reason;
+          }
+
+          const wicProgram = matchData.result.programs.find(function (program) {
+            return program.id === "wic";
+          });
+
+          if (wicProgram) {
+            wicCard.hidden = false;
+            wicStatus.textContent = wicProgram.status;
+            wicReason.textContent = wicProgram.reason;
           }
 
           const locations = matchData.result.locations || [];
@@ -183,12 +284,16 @@
               const item = document.createElement("li");
               const title = document.createElement("h3");
               const address = document.createElement("p");
+              const distance = document.createElement("p");
               const hours = document.createElement("p");
               const mapLink = document.createElement("a");
 
               item.className = "resource-card";
               title.textContent = location.name;
               address.textContent = location.address;
+              distance.textContent = Number.isFinite(location.distanceMiles)
+                ? location.distanceMiles + " miles away"
+                : "Distance not available";
               hours.textContent = location.hours
                 ? "Hours: " +
                   Object.entries(location.hours)
@@ -212,9 +317,9 @@
                 website.rel = "noopener";
                 website.textContent = "Visit website";
 
-                item.append(title, address, hours, website, mapLink);
+                item.append(title, address, distance, hours, website, mapLink);
               } else {
-                item.append(title, address, hours, mapLink);
+                item.append(title, address, distance, hours, mapLink);
               }
 
               list.appendChild(item);
@@ -238,21 +343,6 @@
             );
 
             window.location.href = "form.html";
-          });
-
-          saveButton.addEventListener("click", function () {
-            const resource = {
-              id: "fresh-bucks",
-              name: "Fresh Bucks",
-              status: freshBucksProgram
-                ? freshBucksProgram.status
-                : "Possible Match",
-            };
-
-            localStorage.setItem("savedResources", JSON.stringify([resource]));
-            saveButton.setAttribute("aria-pressed", "true");
-
-            alert("Saved!");
           });
         }
       </script>

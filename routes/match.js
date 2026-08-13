@@ -37,31 +37,24 @@ function toRadians(degrees) {
   return (degrees * Math.PI) / 180;
 }
 
-function getDistanceMiles(userLat, userLng, resourceLat, resourceLng) {
-  const earthRadiusMiles = 3958.8;
+function getDistanceMiles(lat1, lon1, lat2, lon2) {
+  const R = 3958.8; // Earth radius in miles
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
 
-  const latDifference = resourceLat - userLat;
-  const lngDifference = resourceLng - userLng;
-
-  const latDifferenceRadians = toRadians(latDifference);
-  const lngDifferenceRadians = toRadians(lngDifference);
-
-  const userLatRadians = toRadians(userLat);
-  const resourceLatRadians = toRadians(resourceLat);
+  lat1 = toRadians(lat1);
+  lat2 = toRadians(lat2);
 
   const a =
-    Math.sin(latDifferenceRadians / 2) *
-      Math.sin(latDifferenceRadians / 2) +
-    Math.cos(userLatRadians) *
-      Math.cos(resourceLatRadians) *
-      Math.sin(lngDifferenceRadians / 2) *
-      Math.sin(lngDifferenceRadians / 2);
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLon / 2) *
+      Math.sin(dLon / 2) *
+      Math.cos(lat1) *
+      Math.cos(lat2);
 
-  const distanceRadians = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  const distanceMiles = earthRadiusMiles * distanceRadians;
-
-  return distanceMiles;
+  return R * c;
 }
 
 router.post("/", async function (req, res) {
@@ -69,11 +62,10 @@ router.post("/", async function (req, res) {
     members,
     income,
     zipcode,
-    snap,
     specialGroup,
   } = req.body;
 
-  if (!members || !income || !zipcode || !snap) {
+  if (!members || !income || !zipcode) {
     return res.status(400).json({
       error: "Missing required information",
     });
@@ -92,11 +84,34 @@ router.post("/", async function (req, res) {
   const isSeattleZip = zipcode.startsWith("981");
 
   const hasSpecialGroup = specialGroup === "yes";
+  const snapIncomeLimits = [
+    0,
+    2660,
+    3607,
+    4553,
+    5500,
+    6447,
+  ];
+  const mayQualifyForSnap =
+    incomeNumber <= snapIncomeLimits[householdSize];
+
+  const wicIncomeLimits = {
+    1: 2461,
+    2: 3337,
+    3: 4212,
+    4: 5088,
+    5: 5964,
+  };
+
+  const qualifiesForWic =
+    hasSpecialGroup &&
+    isSeattleZip &&
+    incomeNumber <= wicIncomeLimits[householdSize];
 
   let freshBucksStatus = "Possible Match";
 
   if (
-    snap === "yes" &&
+    mayQualifyForSnap &&
     householdSize > 0 &&
     incomeNumber > 0 &&
     isSeattleZip
@@ -155,8 +170,7 @@ router.post("/", async function (req, res) {
       return resource.category === "food_bank";
     });
 
-    res.json({
-      programs: [
+    const programs = [
         {
           id: "fresh-bucks",
           name: "Fresh Bucks",
@@ -168,7 +182,23 @@ router.post("/", async function (req, res) {
           status: "Available to Everyone",
           reason: foodBankReason,
         },
-      ],
+      ];
+
+      if (mayQualifyForSnap) {
+        programs.push({
+    id: "basic-food",
+    name: "SNAP / Basic Food",
+    status: "Possible Match",
+  });}
+  if (hasSpecialGroup && qualifiesForWic) {
+  programs.push({
+    id: "wic",
+    name: "WIC",
+    status: "Possible Match",
+  });}
+
+    res.json({
+      programs,
 
       locations: freshBucksLocations,
       foodBankLocations: foodBankLocations,

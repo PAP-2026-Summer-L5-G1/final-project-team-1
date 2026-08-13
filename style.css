@@ -344,6 +344,18 @@ input:focus-visible,
   line-height: 1.55;
 }
 
+.form-page .field-help {
+  margin: -14px 0 20px;
+  color: #4b5142;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.form-page .field-help a {
+  color: inherit;
+  font-weight: 700;
+}
+
 .form-page select,
 .form-page input[type="text"] {
   display: block;

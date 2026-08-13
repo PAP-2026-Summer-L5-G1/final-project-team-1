@@ -53,17 +53,17 @@
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
-            <option value="5">5 or more</option>
+            <option value="5">5</option>
           </select>
 
-          <label for="income">Annual household income</label>
+          <label for="income">Monthly household income</label>
           <input
             id="income"
             name="income"
             type="number"
             inputmode="numeric"
             min="0"
-            placeholder="e.g. 45000"
+            placeholder="e.g. 5000"
             required
           />
 
@@ -80,23 +80,9 @@
           />
 
           <fieldset>
-            <legend>Are you already using SNAP?</legend>
-
-            <label>
-              YES
-              <input type="radio" name="snap" value="yes" required />
-            </label>
-
-            <label>
-              NO
-              <input type="radio" name="snap" value="no" />
-            </label>
-          </fieldset>
-
-          <fieldset>
             <legend>
-              Optional: Are there any children, elderly people, or pregnant
-              women in your household?
+              Optional: Does your household include any children or pregnant
+              people?
             </legend>
 
             <label>
@@ -128,32 +114,19 @@
         document.querySelector("#income").value = data.income;
         document.querySelector("#zipcode").value = data.zipcode;
 
-        document.querySelector(
-          'input[name="snap"][value="' + data.snap + '"]',
-        ).checked = true;
-
-        document.querySelector(
+        const savedSpecialGroup = document.querySelector(
           'input[name="special-group"][value="' + data.specialGroup + '"]',
-        ).checked = true;
+        );
+
+        if (savedSpecialGroup) {
+          savedSpecialGroup.checked = true;
+        }
 
         sessionStorage.removeItem("editFormData");
       }
 
       form.addEventListener("submit", async function (event) {
         event.preventDefault();
-
-        const members = document.querySelector("#members").value;
-        const income = document.querySelector("#income").value.trim();
-        const zipcode = document.querySelector("#zipcode").value.trim();
-        const snap = document.querySelector('input[name="snap"]:checked');
-        const specialGroup = document.querySelector(
-          'input[name="special-group"]:checked',
-        );
-
-        if (!members || !income || !zipcode || !snap) {
-          alert("Please complete the required fields.");
-          return;
-        }
 
         if (!form.checkValidity()) {
           form.reportValidity();
@@ -164,7 +137,7 @@
           members: document.querySelector("#members").value,
           income: document.querySelector("#income").value,
           zipcode: document.querySelector("#zipcode").value,
-          snap: document.querySelector('input[name="snap"]:checked').value,
+
           specialGroup:
             document.querySelector('input[name="special-group"]:checked')
               ?.value || "no",
