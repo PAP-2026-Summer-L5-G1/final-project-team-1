@@ -128,7 +128,8 @@
                 const cards = document.createElement("div");
 
                 group.className = "saved-resource-group";
-                heading.textContent = categoryLabels[category] || "Other Resources";
+                heading.textContent =
+                  categoryLabels[category] || "Other Resources";
                 cards.className = "saved-resource-cards";
                 group.append(heading, cards);
                 savedResourcesList.appendChild(group);
@@ -161,8 +162,7 @@
                 const freshBucks = resource.accepts_fresh_bucks
                   ? " · Accepts Fresh Bucks"
                   : "";
-                details.textContent =
-                  formatHours(resource.hours) + freshBucks;
+                details.textContent = formatHours(resource.hours) + freshBucks;
 
                 if (savedItem.note) {
                   note.className = "saved-resource-note";

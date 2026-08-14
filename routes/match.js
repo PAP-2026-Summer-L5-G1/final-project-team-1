@@ -195,6 +195,8 @@ router.post("/", async function (req, res) {
     id: "wic",
     name: "WIC",
     status: "Possible Match",
+    reason:
+      "Your household includes children or a pregnant person, so WIC may be worth exploring.",
   });}
 
     res.json({

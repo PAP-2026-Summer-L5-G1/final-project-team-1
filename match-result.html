@@ -176,7 +176,10 @@
           </p>
 
           <h3>Why it may fit you</h3>
-          <p id="wicReason"></p>
+          <p id="wicReason">
+            Your household includes children or a pregnant person, so WIC may
+            be worth exploring.
+          </p>
 
           <div class="hero-actions">
             <a
@@ -260,7 +263,9 @@
           if (basicFoodProgram) {
             basicFoodCard.hidden = false;
             basicFoodStatus.textContent = basicFoodProgram.status;
-            basicFoodReason.textContent = basicFoodProgram.reason;
+            basicFoodReason.textContent =
+              basicFoodProgram.reason ||
+              "Your reported household income may meet the Basic Food guideline.";
           }
 
           const wicProgram = matchData.result.programs.find(function (program) {
@@ -270,7 +275,9 @@
           if (wicProgram) {
             wicCard.hidden = false;
             wicStatus.textContent = wicProgram.status;
-            wicReason.textContent = wicProgram.reason;
+            wicReason.textContent =
+              wicProgram.reason ||
+              "Your household includes children or a pregnant person, so WIC may be worth exploring.";
           }
 
           const locations = matchData.result.locations || [];
